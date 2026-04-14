@@ -10,10 +10,11 @@ from unittest.mock import patch
 def test_save_and_load_round_trip(tmp_path):
     state_file = str(tmp_path / 'state.json')
     trades = pd.DataFrame([{
-        'symbol':      'AAPL',
-        'entry_date':  '2024-01-15',
-        'entry_price': 185.20,
-        'eps_beat_pct': 12.5,
+        'symbol':        'AAPL',
+        'entry_date':    '2024-01-15',
+        'entry_price':   185.20,
+        'stop_price':    166.68,
+        'eps_beat_pct':  12.5,
         'earnings_date': '2024-01-14',
     }])
 
@@ -63,3 +64,47 @@ def test_save_empty_state(tmp_path):
         loaded = load_state()
 
     assert loaded.empty
+
+
+def test_save_and_load_persists_stop_price(tmp_path):
+    state_file = str(tmp_path / 'state.json')
+    trades = pd.DataFrame([{
+        'symbol':       'AAPL',
+        'entry_date':   '2024-01-15',
+        'entry_price':  185.20,
+        'stop_price':   166.68,
+        'eps_beat_pct': 12.5,
+        'earnings_date': '2024-01-14',
+    }])
+
+    with patch('state.STATE_FILE', state_file):
+        from state import save_state, load_state
+        save_state(trades)
+        loaded = load_state()
+
+    assert float(loaded.iloc[0]['stop_price']) == pytest.approx(166.68)
+
+
+def test_load_state_backward_compat_missing_stop_price(tmp_path):
+    """Old state.json files without stop_price should load with NaN for that column."""
+    import json
+    state_file = str(tmp_path / 'state.json')
+    old_state = {
+        'open_trades': [{
+            'symbol':      'AAPL',
+            'entry_date':  '2024-01-15',
+            'entry_price': 185.20,
+            'eps_beat_pct': 12.5,
+            'earnings_date': '2024-01-14',
+        }]
+    }
+    with open(state_file, 'w') as f:
+        json.dump(old_state, f)
+
+    with patch('state.STATE_FILE', state_file):
+        from state import load_state
+        loaded = load_state()
+
+    assert 'stop_price' in loaded.columns
+    assert len(loaded) == 1
+    assert pd.isna(loaded.iloc[0]['stop_price'])

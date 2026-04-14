@@ -11,7 +11,7 @@ def _make_trades(*entries):
     """entries: list of (symbol, entry_date_str) tuples."""
     return pd.DataFrame([
         {'symbol': sym, 'entry_date': ed, 'entry_price': 100.0,
-         'eps_beat_pct': 12.0, 'earnings_date': ed}
+         'stop_price': 90.0, 'eps_beat_pct': 12.0, 'earnings_date': ed}
         for sym, ed in entries
     ])
 
@@ -75,39 +75,99 @@ def test_get_active_positions_empty_trades():
     assert result == []
 
 
-# ---- check_exits ----
 
-def test_check_exits_triggers_after_20_trading_days():
+# ---- check_exits (updated: prices_dict + [{symbol, reason}] return) ----
+
+def _make_prices_dict(symbol, closes, start_date='2024-01-10'):
+    """Build a minimal {symbol: prices_df} dict for check_exits tests."""
+    dates = pd.bdate_range(start_date, periods=len(closes))
+    df = pd.DataFrame({'date': dates.date, 'close': closes})
+    return {symbol: df}
+
+
+def test_check_exits_time_exit_triggers_after_20_trading_days():
     import pandas_market_calendars as mcal
     from portfolio import check_exits
 
     nyse     = mcal.get_calendar('NYSE')
     start    = date(2024, 1, 10)
     schedule = nyse.schedule(start_date=str(start), end_date='2024-03-31')
-    # index[20] = the 21st row = 20 trading days ELAPSED since entry (entry is index[0])
     exit_day = schedule.index[20].date()
 
-    trades = _make_trades(('AAPL', str(start)))
-    result = check_exits(trades, exit_day)
-    assert 'AAPL' in result
+    trades      = _make_trades(('AAPL', str(start)))
+    prices_dict = _make_prices_dict('AAPL', [95.0] * 25)  # above stop_price=90
+    result      = check_exits(trades, prices_dict, exit_day)
+
+    symbols = [e['symbol'] for e in result]
+    reasons = [e['reason']  for e in result]
+    assert 'AAPL' in symbols
+    assert reasons[symbols.index('AAPL')] == 'time'
 
 
-def test_check_exits_does_not_trigger_early():
+def test_check_exits_time_exit_does_not_trigger_early():
     import pandas_market_calendars as mcal
     from portfolio import check_exits
 
     nyse     = mcal.get_calendar('NYSE')
     start    = date(2024, 1, 10)
     schedule = nyse.schedule(start_date=str(start), end_date='2024-03-31')
-    early    = schedule.index[10].date()  # Only 10 days elapsed
+    early    = schedule.index[10].date()
 
-    trades = _make_trades(('AAPL', str(start)))
-    result = check_exits(trades, early)
-    assert 'AAPL' not in result
+    trades      = _make_trades(('AAPL', str(start)))
+    prices_dict = _make_prices_dict('AAPL', [95.0] * 15)
+    result      = check_exits(trades, prices_dict, early)
+
+    symbols = [e['symbol'] for e in result]
+    assert 'AAPL' not in symbols
 
 
-def test_check_exits_empty_trades():
+def test_check_exits_stop_loss_triggers_when_close_at_or_below_stop():
     from portfolio import check_exits
-    trades = pd.DataFrame(columns=['symbol', 'entry_date', 'entry_price', 'eps_beat_pct', 'earnings_date'])
-    result = check_exits(trades, date(2024, 3, 1))
+
+    start       = date(2024, 1, 10)
+    trades      = _make_trades(('AAPL', str(start)))
+    # stop_price=90.0 in _make_trades; close=89.0 triggers stop
+    prices_dict = _make_prices_dict('AAPL', [100.0] * 5 + [89.0], start_date='2024-01-10')
+    as_of       = list(prices_dict['AAPL']['date'])[-1]
+
+    result  = check_exits(trades, prices_dict, as_of)
+    symbols = [e['symbol'] for e in result]
+    reasons = [e['reason']  for e in result]
+    assert 'AAPL' in symbols
+    assert reasons[symbols.index('AAPL')] == 'stop_loss'
+
+
+def test_check_exits_stop_loss_does_not_trigger_above_stop():
+    from portfolio import check_exits
+
+    start       = date(2024, 1, 10)
+    trades      = _make_trades(('AAPL', str(start)))
+    # close=91.0 > stop_price=90.0 — should NOT trigger
+    prices_dict = _make_prices_dict('AAPL', [100.0] * 5 + [91.0], start_date='2024-01-10')
+    as_of       = list(prices_dict['AAPL']['date'])[-1]
+
+    result  = check_exits(trades, prices_dict, as_of)
+    symbols = [e['symbol'] for e in result]
+    assert 'AAPL' not in symbols
+
+
+def test_check_exits_stop_loss_triggers_exactly_at_stop_price():
+    from portfolio import check_exits
+
+    start       = date(2024, 1, 10)
+    trades      = _make_trades(('AAPL', str(start)))
+    # close exactly equals stop_price=90.0
+    prices_dict = _make_prices_dict('AAPL', [100.0] * 5 + [90.0], start_date='2024-01-10')
+    as_of       = list(prices_dict['AAPL']['date'])[-1]
+
+    result  = check_exits(trades, prices_dict, as_of)
+    symbols = [e['symbol'] for e in result]
+    assert 'AAPL' in symbols
+
+
+def test_check_exits_empty_trades_returns_empty_list():
+    from portfolio import check_exits
+    trades = pd.DataFrame(columns=['symbol', 'entry_date', 'entry_price',
+                                   'stop_price', 'eps_beat_pct', 'earnings_date'])
+    result = check_exits(trades, {}, date(2024, 3, 1))
     assert result == []

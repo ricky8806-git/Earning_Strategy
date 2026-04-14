@@ -122,7 +122,7 @@ def test_build_signals_returns_correct_columns():
     events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
 
     result = build_signals(events, prices)
-    assert list(result.columns) == ['symbol', 'earnings_date', 'entry_date', 'entry_open', 'eps_beat_pct', 'trigger_day']
+    assert list(result.columns) == ['symbol', 'earnings_date', 'entry_date', 'entry_open', 'eps_beat_pct', 'trigger_day', 'stop_price']
 
 
 def test_build_signals_d0_trigger_captured():
@@ -215,3 +215,30 @@ def test_build_signals_entry_date_is_d1_for_d0_trigger():
     assert len(result) == 1
     # Entry date should be the day AFTER earnings (D+1), confirmed as D0 trigger
     assert result.iloc[0]['entry_date'] == pd.Timestamp(dates[22])
+
+
+def test_build_signals_includes_stop_price():
+    from signals import build_signals
+    prices = _make_prices_with_big_move(earnings_idx=21)
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert len(result) == 1
+    assert 'stop_price' in result.columns
+    # stop_price = entry_open * (1 - 0.10)
+    expected_stop = result.iloc[0]['entry_open'] * 0.90
+    assert result.iloc[0]['stop_price'] == pytest.approx(expected_stop)
+
+
+def test_build_signals_stop_price_column_in_correct_position():
+    from signals import build_signals
+    prices = _make_prices_with_big_move(earnings_idx=21)
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert list(result.columns) == [
+        'symbol', 'earnings_date', 'entry_date', 'entry_open',
+        'eps_beat_pct', 'trigger_day', 'stop_price'
+    ]

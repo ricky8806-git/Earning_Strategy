@@ -1,6 +1,6 @@
 # pead_strategy/signals.py
 import pandas as pd
-from config import EPS_BEAT_MIN_PCT, DAY0_RET_MIN, VOLUME_MULT
+from config import EPS_BEAT_MIN_PCT, DAY0_RET_MIN, VOLUME_MULT, STOP_LOSS_PCT
 
 
 def compute_features(prices_df):
@@ -37,7 +37,8 @@ def compute_features(prices_df):
     return df
 
 
-_SIGNALS_COLS = ['symbol', 'earnings_date', 'entry_date', 'entry_open', 'eps_beat_pct', 'trigger_day']
+_SIGNALS_COLS = ['symbol', 'earnings_date', 'entry_date', 'entry_open',
+                 'eps_beat_pct', 'trigger_day', 'stop_price']
 
 
 def _empty_signals():
@@ -119,4 +120,5 @@ def build_signals(events_df, prices_df):
         return _empty_signals()
 
     result = pd.concat(parts, ignore_index=True)
+    result['stop_price'] = result['entry_open'] * (1 - STOP_LOSS_PCT)
     return result[_SIGNALS_COLS].reset_index(drop=True)
