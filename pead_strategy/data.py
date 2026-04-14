@@ -9,7 +9,7 @@ def get_sp500_symbols(sectors=None):
     if sectors is None:
         sectors = TARGET_SECTORS
     df = pd.read_csv(SP500_URL)
-    return df[df['Sector'].isin(sectors)]['Symbol'].tolist()
+    return df[df['GICS Sector'].isin(sectors)]['Symbol'].tolist()
 
 
 def get_prices(symbol, start, end):
