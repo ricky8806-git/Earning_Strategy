@@ -77,3 +77,141 @@ def test_compute_features_d1_date_is_next_date():
 
     # d1_date at row 0 should be the date of row 1
     assert result['d1_date'].iloc[0] == pd.Timestamp(prices['date'].iloc[1])
+
+
+def _make_earnings_event(earnings_date, eps_estimate, eps_actual):
+    surprise_pct = (
+        (eps_actual - eps_estimate) / abs(eps_estimate) * 100
+        if eps_estimate != 0.0 else float('nan')
+    )
+    return pd.DataFrame([{
+        'symbol':       'TEST',
+        'earnings_date': earnings_date,
+        'eps_estimate':  eps_estimate,
+        'eps_actual':    eps_actual,
+        'surprise_pct':  surprise_pct,
+    }])
+
+
+def _make_prices_with_big_move(earnings_idx=21, n=25):
+    """
+    25 days of prices. On earnings_idx, close jumps >3% from prior_close
+    and volume is 3x the prior average.
+    """
+    dates = pd.bdate_range('2024-01-02', periods=n)
+    closes = [100.0] * n
+    closes[earnings_idx] = 104.5          # +4.5% from prior close of 100
+    opens  = [c - 0.5 for c in closes]
+    volumes = [1_000_000] * n
+    volumes[earnings_idx] = 3_000_000     # 3x average
+    volumes[earnings_idx + 1] = 2_500_000 # high D+1 volume too
+    return pd.DataFrame({
+        'date':   dates.date,
+        'open':   opens,
+        'high':   [c + 2 for c in closes],
+        'low':    [c - 2 for c in closes],
+        'close':  closes,
+        'volume': volumes,
+    })
+
+
+def test_build_signals_returns_correct_columns():
+    from signals import build_signals
+    prices = _make_prices_with_big_move()
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert list(result.columns) == ['symbol', 'earnings_date', 'entry_date', 'entry_open', 'eps_beat_pct', 'trigger_day']
+
+
+def test_build_signals_d0_trigger_captured():
+    from signals import build_signals
+    prices = _make_prices_with_big_move(earnings_idx=21)
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert len(result) == 1
+    assert result.iloc[0]['trigger_day'] == 'd0'
+    assert result.iloc[0]['eps_beat_pct'] == pytest.approx(15.0)
+
+
+def test_build_signals_d1_trigger_when_d0_flat():
+    """D0 flat but D1 closes +3%+ over pre-earnings close. Entry on D+2 open."""
+    from signals import build_signals
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    closes = [100.0] * 25
+    closes[21] = 100.5   # D0: only +0.5%, does NOT trigger D0
+    closes[22] = 104.2   # D1: +4.2% from pre-earnings 100 -> triggers D1
+    volumes = [1_000_000] * 25
+    volumes[21] = 900_000   # D0 volume low
+    volumes[22] = 2_500_000 # D1 volume is 2.5x average
+
+    prices = pd.DataFrame({
+        'date':   dates.date,
+        'open':   [c - 0.5 for c in closes],
+        'high':   [c + 2   for c in closes],
+        'low':    [c - 2   for c in closes],
+        'close':  closes,
+        'volume': volumes,
+    })
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.12)
+
+    result = build_signals(events, prices)
+    assert len(result) == 1
+    assert result.iloc[0]['trigger_day'] == 'd1'
+
+
+def test_build_signals_rejects_insufficient_eps_beat():
+    from signals import build_signals
+    prices = _make_prices_with_big_move()
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.05)  # only 5%
+
+    result = build_signals(events, prices)
+    assert result.empty
+
+
+def test_build_signals_rejects_zero_eps_estimate():
+    from signals import build_signals
+    prices = _make_prices_with_big_move()
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=0.0, eps_actual=0.15)
+
+    result = build_signals(events, prices)
+    assert result.empty
+
+
+def test_build_signals_rejects_low_volume():
+    from signals import build_signals
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    closes = [100.0] * 25
+    closes[21] = 104.5  # +4.5% -- would trigger on return alone
+    volumes = [1_000_000] * 25
+    volumes[21] = 1_500_000  # Only 1.5x -- below 2x threshold
+
+    prices = pd.DataFrame({
+        'date':   dates.date,
+        'open':   [c - 0.5 for c in closes],
+        'high':   [c + 2   for c in closes],
+        'low':    [c - 2   for c in closes],
+        'close':  closes,
+        'volume': volumes,
+    })
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert result.empty
+
+
+def test_build_signals_entry_date_is_d1_for_d0_trigger():
+    from signals import build_signals
+    prices = _make_prices_with_big_move(earnings_idx=21)
+    dates  = pd.bdate_range('2024-01-02', periods=25)
+    events = _make_earnings_event(dates[21].date(), eps_estimate=1.00, eps_actual=1.15)
+
+    result = build_signals(events, prices)
+    assert len(result) == 1
+    # Entry date should be the day AFTER earnings (D+1), confirmed as D0 trigger
+    assert result.iloc[0]['entry_date'] == pd.Timestamp(dates[22])
