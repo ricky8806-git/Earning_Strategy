@@ -45,7 +45,7 @@ def _get_latest_close(prices_dict, symbol, as_of_date):
     if df is None or df.empty:
         return None
     as_of = pd.Timestamp(as_of_date).date()
-    rows  = df[pd.to_datetime(df['date']).dt.date <= as_of]
+    rows  = df[pd.to_datetime(df['date']).dt.date <= as_of].sort_values('date')
     if rows.empty:
         return None
     return float(rows.iloc[-1]['close'])

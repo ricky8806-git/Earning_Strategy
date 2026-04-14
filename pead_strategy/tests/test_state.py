@@ -10,10 +10,11 @@ from unittest.mock import patch
 def test_save_and_load_round_trip(tmp_path):
     state_file = str(tmp_path / 'state.json')
     trades = pd.DataFrame([{
-        'symbol':      'AAPL',
-        'entry_date':  '2024-01-15',
-        'entry_price': 185.20,
-        'eps_beat_pct': 12.5,
+        'symbol':        'AAPL',
+        'entry_date':    '2024-01-15',
+        'entry_price':   185.20,
+        'stop_price':    166.68,
+        'eps_beat_pct':  12.5,
         'earnings_date': '2024-01-14',
     }])
 
@@ -106,3 +107,4 @@ def test_load_state_backward_compat_missing_stop_price(tmp_path):
 
     assert 'stop_price' in loaded.columns
     assert len(loaded) == 1
+    assert pd.isna(loaded.iloc[0]['stop_price'])

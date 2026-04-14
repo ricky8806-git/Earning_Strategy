@@ -35,7 +35,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 _LOOKBACK_DAYS       = 90   # Days of price history to fetch for signal computation
-_STOP_PRICE_LOOKBACK = 30   # Days of price history to fetch for stop loss check
+_STOP_PRICE_LOOKBACK = 45   # Days of price history to fetch for stop loss check
 
 
 def _append_log(row_date, symbol, action, price, eps_beat, reason=''):
@@ -84,9 +84,13 @@ def run():
 
     # 3. Check exits (time exit OR stop loss)
     exited = check_exits(trades_df, prices_dict, today)
+    seen_exits: set = set()
     for exit_info in exited:
         sym    = exit_info['symbol']
         reason = exit_info['reason']
+        if sym in seen_exits:
+            continue
+        seen_exits.add(sym)
         log.info(f"EXIT {sym} reason={reason}")
         close_position(sym)
         trades_df = trades_df[trades_df['symbol'] != sym].reset_index(drop=True)
