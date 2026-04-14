@@ -39,3 +39,45 @@ def get_prices(symbol, start, end):
 def get_spy_prices(start, end):
     """Convenience wrapper: prices for SPY."""
     return get_prices('SPY', start, end)
+
+
+_EARNINGS_EMPTY = pd.DataFrame(
+    columns=['earnings_date', 'eps_estimate', 'eps_actual', 'surprise_pct']
+)
+
+
+def get_earnings(symbol):
+    """Fetch earnings history from yfinance. Returns DataFrame with standardised columns."""
+    ticker = yf.Ticker(symbol)
+    try:
+        df = ticker.earnings_dates
+        if df is None or (hasattr(df, 'empty') and df.empty):
+            return _EARNINGS_EMPTY.copy()
+
+        df = df.reset_index()
+
+        # Rename columns robustly regardless of exact yfinance column names
+        col_map = {}
+        for col in df.columns:
+            lower = col.lower().strip()
+            if 'date' in lower:
+                col_map[col] = 'earnings_date'
+            elif 'estimate' in lower:
+                col_map[col] = 'eps_estimate'
+            elif 'reported' in lower or 'actual' in lower:
+                col_map[col] = 'eps_actual'
+            elif 'surprise' in lower:
+                col_map[col] = 'surprise_pct'
+        df = df.rename(columns=col_map)
+
+        # Strip timezone so .dt.date works cleanly
+        df['earnings_date'] = (
+            pd.to_datetime(df['earnings_date'])
+            .dt.tz_localize(None)
+            .dt.date
+        )
+        df = df.dropna(subset=['eps_estimate', 'eps_actual'])
+        return df[['earnings_date', 'eps_estimate', 'eps_actual', 'surprise_pct']].reset_index(drop=True)
+
+    except Exception:
+        return _EARNINGS_EMPTY.copy()

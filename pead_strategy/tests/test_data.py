@@ -90,3 +90,78 @@ def test_get_spy_prices_calls_get_prices_with_spy():
     mock_dl.assert_called_once()
     call_args = mock_dl.call_args
     assert call_args[0][0] == 'SPY'
+
+
+from unittest.mock import MagicMock
+
+
+def _make_mock_earnings_df():
+    """Simulate yfinance Ticker.earnings_dates output."""
+    idx = pd.DatetimeIndex([
+        pd.Timestamp('2024-01-29 10:30:00', tz='America/New_York'),
+        pd.Timestamp('2023-10-26 10:30:00', tz='America/New_York'),
+    ])
+    idx.name = 'Earnings Date'
+    return pd.DataFrame({
+        'EPS Estimate':  [2.10, 1.41],
+        'Reported EPS':  [2.18, 1.46],
+        'Surprise(%)':   [3.81, 3.55],
+    }, index=idx)
+
+
+def test_get_earnings_returns_standard_columns():
+    mock_ticker = MagicMock()
+    mock_ticker.earnings_dates = _make_mock_earnings_df()
+
+    with patch('data.yf.Ticker', return_value=mock_ticker):
+        from data import get_earnings
+        result = get_earnings('AAPL')
+
+    assert list(result.columns) == ['earnings_date', 'eps_estimate', 'eps_actual', 'surprise_pct']
+    assert len(result) == 2
+
+
+def test_get_earnings_strips_timezone():
+    import datetime
+    mock_ticker = MagicMock()
+    mock_ticker.earnings_dates = _make_mock_earnings_df()
+
+    with patch('data.yf.Ticker', return_value=mock_ticker):
+        from data import get_earnings
+        result = get_earnings('AAPL')
+
+    assert isinstance(result['earnings_date'].iloc[0], datetime.date)
+
+
+def test_get_earnings_drops_rows_with_missing_eps():
+    idx = pd.DatetimeIndex([
+        pd.Timestamp('2024-01-29 10:30:00', tz='America/New_York'),
+        pd.Timestamp('2023-10-26 10:30:00', tz='America/New_York'),
+    ])
+    idx.name = 'Earnings Date'
+    df_with_nan = pd.DataFrame({
+        'EPS Estimate': [2.10, None],
+        'Reported EPS': [2.18, None],
+        'Surprise(%)':  [3.81, None],
+    }, index=idx)
+
+    mock_ticker = MagicMock()
+    mock_ticker.earnings_dates = df_with_nan
+
+    with patch('data.yf.Ticker', return_value=mock_ticker):
+        from data import get_earnings
+        result = get_earnings('AAPL')
+
+    assert len(result) == 1
+
+
+def test_get_earnings_returns_empty_on_none():
+    mock_ticker = MagicMock()
+    mock_ticker.earnings_dates = None
+
+    with patch('data.yf.Ticker', return_value=mock_ticker):
+        from data import get_earnings
+        result = get_earnings('FAKE')
+
+    assert result.empty
+    assert list(result.columns) == ['earnings_date', 'eps_estimate', 'eps_actual', 'surprise_pct']
