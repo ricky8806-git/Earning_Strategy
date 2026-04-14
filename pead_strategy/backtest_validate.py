@@ -86,7 +86,8 @@ def run_backtest(days: int = 30, output_csv: str = 'backtest_signals.csv'):
 
     print(f"\n{'='*60}")
     print(f"Events scanned : {len(considered_df)}")
-    print(f"Signals found  : {len(all_signals)}")
+    total_signals = sum(len(s) for s in all_signals)
+    print(f"Signals found  : {total_signals}")
 
     if all_signals:
         result = pd.concat(all_signals, ignore_index=True).sort_values('earnings_date')

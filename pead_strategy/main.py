@@ -35,14 +35,25 @@ _LOOKBACK_DAYS = 90   # Days of price history to fetch for signal computation
 
 
 def _append_log(row_date, symbol, action, price, eps_beat, reason=''):
-    with open(LOG_FILE, 'a', newline='') as f:
+    from pathlib import Path
+    path       = Path(LOG_FILE)
+    write_hdr  = not path.exists()
+    with open(path, 'a', newline='') as f:
         writer = csv.writer(f)
+        if write_hdr:
+            writer.writerow(['date', 'symbol', 'action', 'price', 'eps_beat_pct', 'reason'])
         writer.writerow([row_date, symbol, action, price, eps_beat, reason])
 
 
 def run():
+    from portfolio import _NYSE
     today     = date.today()
-    yesterday = today - timedelta(days=1)
+    # Find the most recent prior trading session (handles weekends + holidays)
+    sched     = _NYSE.schedule(
+        start_date=str(today - timedelta(days=10)),
+        end_date=str(today - timedelta(days=1)),
+    )
+    yesterday = sched.index[-1].date() if not sched.empty else today - timedelta(days=1)
     log.info(f"=== PEAD daily run: {today} ===")
 
     # 1. Load persisted state

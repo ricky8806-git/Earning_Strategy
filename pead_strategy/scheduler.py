@@ -9,12 +9,22 @@ Runs as a long-lived process; checks time every 30 seconds.
 The loop approach is used (vs the 'schedule' library) because the schedule
 library does not natively support timezone-aware scheduling.
 """
+import os
 import subprocess
 import sys
 import time
 from datetime import datetime
 
 import pytz
+import pandas_market_calendars as mcal
+_NYSE_SCHED = mcal.get_calendar('NYSE')
+
+
+def _is_nyse_trading_day(dt):
+    """Return True if dt's date is an NYSE trading day."""
+    d = dt.strftime('%Y-%m-%d')
+    return not _NYSE_SCHED.schedule(start_date=d, end_date=d).empty
+
 
 ET = pytz.timezone('America/New_York')
 
@@ -33,14 +43,46 @@ def _run_script(script):
 
 
 def _prescan():
-    """Evening pre-scan: log what signals would trigger tomorrow."""
+    """Evening pre-scan: scan today's earnings and log D0 triggers for tomorrow's open."""
     print(f"[scheduler] Evening pre-scan at {_et_now().strftime('%H:%M %Z')}")
     subprocess.run(
-        [sys.executable, '-c',
-         'from data import get_sp500_symbols; '
-         'symbols = get_sp500_symbols(); '
-         f'print(f"Pre-scan: {{len(symbols)}} symbols in universe")'],
+        [sys.executable, '-c', '''
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else ".")
+from datetime import date, timedelta
+import pandas as pd
+from data import get_sp500_symbols, get_earnings, get_prices
+from signals import build_signals
+
+today = date.today()
+symbols = get_sp500_symbols()
+print(f"[prescan] Scanning {len(symbols)} symbols for today earnings ({today})...")
+found = 0
+for sym in symbols:
+    try:
+        earnings = get_earnings(sym)
+        if earnings.empty:
+            continue
+        earnings["earnings_date"] = pd.to_datetime(earnings["earnings_date"])
+        recent = earnings[earnings["earnings_date"].dt.date == today]
+        if recent.empty:
+            continue
+        recent = recent.copy()
+        recent["symbol"] = sym
+        prices = get_prices(sym, str(today - timedelta(days=90)), str(today + timedelta(days=3)))
+        if prices.empty:
+            continue
+        signals = build_signals(recent, prices)
+        if not signals.empty:
+            for _, row in signals.iterrows():
+                print(f"[prescan] SIGNAL {sym} eps_beat={row['eps_beat_pct']:.1f}% trigger={row['trigger_day']} entry={row['entry_date']}")
+                found += 1
+    except Exception as e:
+        pass
+print(f"[prescan] Done. {found} signals identified for tomorrow.")
+'''],
         capture_output=False,
+        cwd=os.path.dirname(os.path.abspath(__file__)),
     )
 
 
@@ -55,7 +97,7 @@ def main():
         now   = _et_now()
         today = now.date()
 
-        if now.hour == 9 and now.minute == 31 and last_open_run != today:
+        if now.hour == 9 and now.minute == 31 and last_open_run != today and _is_nyse_trading_day(now):
             print(f"[scheduler] Triggering market-open run at {now}")
             _run_script('main.py')
             last_open_run = today
