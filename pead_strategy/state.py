@@ -4,11 +4,14 @@ import pandas as pd
 from pathlib import Path
 from config import STATE_FILE
 
-_COLUMNS = ['symbol', 'entry_date', 'entry_price', 'eps_beat_pct', 'earnings_date']
+_COLUMNS = ['symbol', 'entry_date', 'entry_price', 'stop_price', 'eps_beat_pct', 'earnings_date']
 
 
 def load_state():
-    """Load open trades from STATE_FILE. Returns empty DataFrame if file absent."""
+    """Load open trades from STATE_FILE. Returns empty DataFrame if file absent.
+
+    Backward compatible: old JSON without stop_price loads with NaN for that column.
+    """
     path = Path(STATE_FILE)
     if not path.exists():
         return pd.DataFrame(columns=_COLUMNS)
@@ -20,7 +23,12 @@ def load_state():
     if not trades:
         return pd.DataFrame(columns=_COLUMNS)
 
-    return pd.DataFrame(trades)[_COLUMNS]
+    df = pd.DataFrame(trades)
+    # Backward compat: add missing columns with NaN
+    for col in _COLUMNS:
+        if col not in df.columns:
+            df[col] = float('nan')
+    return df[_COLUMNS]
 
 
 def save_state(trades_df):
