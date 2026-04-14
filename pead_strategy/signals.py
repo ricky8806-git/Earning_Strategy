@@ -37,7 +37,8 @@ def compute_features(prices_df):
     return df
 
 
-_SIGNALS_COLS = ['symbol', 'earnings_date', 'entry_date', 'entry_open', 'eps_beat_pct', 'trigger_day']
+_SIGNALS_COLS = ['symbol', 'earnings_date', 'entry_date', 'entry_open',
+                 'eps_beat_pct', 'trigger_day', 'stop_price']
 
 
 def _empty_signals():
@@ -118,5 +119,7 @@ def build_signals(events_df, prices_df):
     if not parts:
         return _empty_signals()
 
+    from config import STOP_LOSS_PCT
     result = pd.concat(parts, ignore_index=True)
+    result['stop_price'] = result['entry_open'] * (1 - STOP_LOSS_PCT)
     return result[_SIGNALS_COLS].reset_index(drop=True)
