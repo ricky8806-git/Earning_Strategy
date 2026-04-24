@@ -41,6 +41,16 @@ jobs:
         working-directory: pead_strategy
         run: python main.py 2>&1 | tee ../pead_run.log; exit ${PIPESTATUS[0]}
 
+      - name: Commit run log back to repo (always, even on failure)
+        if: always()
+        run: |
+          git config user.email "pead-bot@auto"
+          git config user.name "PEAD Bot"
+          cp pead_run.log pead_strategy/pead_run.log 2>/dev/null || true
+          git add pead_strategy/state.json pead_strategy/trades_log.csv pead_strategy/pead_run.log || true
+          git diff --cached --quiet || git commit -m "chore: run log ${{ github.run_id }} [skip ci]"
+          git push origin main || true
+
       - name: Upload logs as artifact (always, even on failure)
         if: always()
         uses: actions/upload-artifact@v4
