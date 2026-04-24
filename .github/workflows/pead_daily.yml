@@ -39,7 +39,7 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           GITHUB_TOKEN:      ${{ secrets.GH_PAT }}
         working-directory: pead_strategy
-        run: python main.py
+        run: python main.py 2>&1 | tee ../pead_run.log; exit ${PIPESTATUS[0]}
 
       - name: Upload logs as artifact (always, even on failure)
         if: always()
@@ -49,4 +49,5 @@ jobs:
           path: |
             pead_strategy/state.json
             pead_strategy/trades_log.csv
+            pead_run.log
           retention-days: 90
