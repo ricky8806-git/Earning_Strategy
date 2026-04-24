@@ -1,0 +1,28 @@
+{
+  "open_trades": [
+    {
+      "symbol": "NTRS",
+      "entry_date": "2026-04-22",
+      "entry_price": 171.74000549316406,
+      "stop_price": 154.56600494384767,
+      "eps_beat_pct": 16.309012875536474,
+      "earnings_date": "2026-04-21"
+    },
+    {
+      "symbol": "TXN",
+      "entry_date": "2026-04-24",
+      "entry_price": 287.8299865722656,
+      "stop_price": 259.0469879150391,
+      "eps_beat_pct": 23.52941176470587,
+      "earnings_date": "2026-04-22"
+    },
+    {
+      "symbol": "WST",
+      "entry_date": "2026-04-24",
+      "entry_price": 316.0,
+      "stop_price": 284.40000000000003,
+      "eps_beat_pct": 26.785714285714285,
+      "earnings_date": "2026-04-23"
+    }
+  ]
+}
