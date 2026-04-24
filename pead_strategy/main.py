@@ -16,6 +16,7 @@ Flow:
 """
 import csv
 import logging
+import subprocess
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -26,7 +27,7 @@ from data      import get_earnings, get_prices, get_sp500_symbols
 from portfolio import check_exits, get_active_positions, get_portfolio_weights
 from signals   import build_signals
 from state     import load_state, save_state
-from config    import LOG_FILE
+from config    import LOG_FILE, GITHUB_TOKEN
 
 logging.basicConfig(
     level  = logging.INFO,
@@ -63,6 +64,50 @@ def _fetch_prices_for_positions(symbols, today):
     return prices_dict
 
 
+repo_root = Path(__file__).resolve().parent.parent
+
+
+def _push_state():
+    """Commit state.json and trades_log.csv back to the remote repo."""
+    if not GITHUB_TOKEN:
+        log.warning("GITHUB_TOKEN is empty — skipping git push")
+        return
+
+    def _git(*args):
+        try:
+            return subprocess.run(
+                ['git', *args],
+                cwd=repo_root,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+        except subprocess.TimeoutExpired:
+            log.warning(f"git {args[0]} timed out after 60s")
+            from types import SimpleNamespace
+            return SimpleNamespace(returncode=1, stderr='timeout')
+
+    _git('config', 'user.email', 'pead-bot@auto')
+    _git('config', 'user.name', 'PEAD Bot')
+    _git('add', 'pead_strategy/state.json', 'pead_strategy/trades_log.csv')
+
+    diff = _git('diff', '--cached', '--quiet')
+    if diff.returncode == 0:
+        log.info("No state changes to push")
+        return
+
+    commit_msg = f'chore: state update {date.today()} [skip ci]'
+    commit = _git('commit', '-m', commit_msg)
+    if commit.returncode != 0:
+        log.warning(f"git commit failed: {commit.stderr.strip()}")
+        return
+
+    push_url = f"https://x-access-token:{GITHUB_TOKEN}@github.com/ricky8806-git/Earning_Strategy.git"
+    push = _git('push', push_url, 'main')
+    if push.returncode != 0:
+        log.warning(f"git push failed: {push.stderr.strip()}")
+
+
 def run():
     from portfolio import _NYSE
     today = date.today()
@@ -97,56 +142,72 @@ def run():
         action = 'EXIT_TIME' if reason == 'time' else 'EXIT_STOP'
         _append_log(today, sym, action, None, None, reason)
 
-    # 4. Scan yesterday's earnings for new signals
+    # 4. Scan for new signals
+    #
+    # Two scan windows, each restricted to the trigger type that has valid data at 9:31 AM:
+    #   yesterday    → D0 trigger only  (D1 close unavailable; entry = today's open)
+    #   two_days_ago → D1 trigger only  (yesterday's full close = D1; entry = today's open)
+    two_days_ago = sched.index[-2].date() if len(sched) >= 2 else yesterday - timedelta(days=1)
+    scan_plan    = [(yesterday, 'd0'), (two_days_ago, 'd1')]
+
     symbols    = get_sp500_symbols()
     new_trades = []
+    already_open = set(trades_df['symbol'].tolist())
 
     for sym in symbols:
+        if sym in already_open:
+            continue
         try:
             earnings = get_earnings(sym)
             if earnings.empty:
                 continue
 
-            # Keep only yesterday's announcement
             earnings['earnings_date'] = pd.to_datetime(earnings['earnings_date'])
-            recent = earnings[earnings['earnings_date'].dt.date == yesterday]
-            if recent.empty:
-                continue
 
-            recent = recent.copy()
-            recent['symbol'] = sym
-
-            price_start = (yesterday - timedelta(days=_LOOKBACK_DAYS)).isoformat()
+            price_start = (two_days_ago - timedelta(days=_LOOKBACK_DAYS)).isoformat()
             price_end   = (today + timedelta(days=3)).isoformat()
-            prices      = get_prices(sym, price_start, price_end)
-            if prices.empty:
-                log.warning(f"No price data for {sym}; skipping")
-                _append_log(today, sym, 'SKIP', None, None, 'no_price_data')
-                continue
+            prices      = None  # lazy-load once we find a relevant earnings date
 
-            signals = build_signals(recent, prices)
-            if signals.empty:
-                _append_log(today, sym, 'SCAN_MISS', None,
-                            recent['eps_actual'].iloc[0] if len(recent) else None,
-                            'no_signal')
-                continue
+            for scan_date, trigger_type in scan_plan:
+                recent = earnings[earnings['earnings_date'].dt.date == scan_date]
+                if recent.empty:
+                    continue
 
-            for _, row in signals.iterrows():
-                entry_date = row['entry_date']
-                if hasattr(entry_date, 'date'):
-                    entry_date = entry_date.date()
-                new_trade = {
-                    'symbol':        sym,
-                    'entry_date':    str(entry_date),
-                    'entry_price':   row['entry_open'],
-                    'stop_price':    row['stop_price'],
-                    'eps_beat_pct':  row['eps_beat_pct'],
-                    'earnings_date': str(yesterday),
-                }
-                new_trades.append(new_trade)
-                log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
-                         f"trigger={row['trigger_day']}  stop={row['stop_price']:.2f}")
-                _append_log(today, sym, 'ENTRY', row['entry_open'], row['eps_beat_pct'])
+                if prices is None:
+                    prices = get_prices(sym, price_start, price_end)
+                    if prices.empty:
+                        log.warning(f"No price data for {sym}; skipping")
+                        _append_log(today, sym, 'SKIP', None, None, 'no_price_data')
+                        break
+
+                recent = recent.copy()
+                recent['symbol'] = sym
+
+                signals = build_signals(recent, prices)
+                signals = signals[signals['trigger_day'] == trigger_type]
+                if signals.empty:
+                    _append_log(today, sym, 'SCAN_MISS', None,
+                                recent['eps_actual'].iloc[0] if len(recent) else None,
+                                'no_signal')
+                    continue
+
+                for _, row in signals.iterrows():
+                    entry_date = row['entry_date']
+                    if hasattr(entry_date, 'date'):
+                        entry_date = entry_date.date()
+                    new_trade = {
+                        'symbol':        sym,
+                        'entry_date':    str(entry_date),
+                        'entry_price':   row['entry_open'],
+                        'stop_price':    row['stop_price'],
+                        'eps_beat_pct':  row['eps_beat_pct'],
+                        'earnings_date': str(scan_date),
+                    }
+                    new_trades.append(new_trade)
+                    already_open.add(sym)  # prevent double-entry across scan windows
+                    log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
+                             f"trigger={row['trigger_day']}  stop={row['stop_price']:.2f}")
+                    _append_log(today, sym, 'ENTRY', row['entry_open'], row['eps_beat_pct'])
 
         except Exception as exc:
             log.warning(f"Error processing {sym}: {exc}")
@@ -171,6 +232,7 @@ def run():
     # 8. Save state
     save_state(trades_df)
     log.info("State saved")
+    _push_state()
 
 
 if __name__ == '__main__':
