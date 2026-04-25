@@ -33,6 +33,22 @@ jobs:
       - name: Install dependencies
         run: pip install -r pead_strategy/requirements.txt -q
 
+      - name: Test Alpaca connection
+        env:
+          ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: |
+          python - <<'EOF'
+          import os
+          from alpaca.trading.client import TradingClient
+          key    = os.environ.get('ALPACA_API_KEY', '')
+          secret = os.environ.get('ALPACA_SECRET_KEY', '')
+          print(f"Key present: {bool(key)}  Secret present: {bool(secret)}")
+          client = TradingClient(key, secret, paper=True)
+          acct   = client.get_account()
+          print(f"Account OK — cash={acct.cash}  portfolio_value={acct.portfolio_value}")
+          EOF
+
       - name: Run PEAD strategy
         env:
           ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
@@ -41,15 +57,26 @@ jobs:
         working-directory: pead_strategy
         run: python main.py 2>&1 | tee ../pead_run.log; exit ${PIPESTATUS[0]}
 
-      - name: Commit run log back to repo (always, even on failure)
+      - name: Push log via GitHub API (always, even on failure)
         if: always()
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config user.email "pead-bot@auto"
-          git config user.name "PEAD Bot"
-          cp pead_run.log pead_strategy/pead_run.log 2>/dev/null || true
-          git add pead_strategy/state.json pead_strategy/trades_log.csv pead_strategy/pead_run.log || true
-          git diff --cached --quiet || git commit -m "chore: run log ${{ github.run_id }} [skip ci]"
-          git push origin main || true
+          # Encode log as base64 and PUT it directly — no git push needed
+          CONTENT=$(base64 -w 0 pead_run.log 2>/dev/null || echo "")
+          [ -z "$CONTENT" ] && echo "No log file found" && exit 0
+          # Get current SHA if file already exists (required for updates)
+          SHA=$(curl -s -H "Authorization: Bearer $GH_PAT" \
+            "https://api.github.com/repos/ricky8806-git/Earning_Strategy/contents/pead_strategy/pead_run.log" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('sha',''))" 2>/dev/null || true)
+          BODY="{\"message\":\"log run ${{ github.run_id }} [skip ci]\",\"content\":\"$CONTENT\""
+          [ -n "$SHA" ] && BODY="$BODY,\"sha\":\"$SHA\""
+          BODY="$BODY}"
+          curl -s -X PUT \
+            -H "Authorization: Bearer $GH_PAT" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ricky8806-git/Earning_Strategy/contents/pead_strategy/pead_run.log" \
+            -d "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Pushed log:', d.get('content',{}).get('name','?'))"
 
       - name: Upload logs as artifact (always, even on failure)
         if: always()
