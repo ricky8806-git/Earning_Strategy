@@ -24,7 +24,7 @@ def get_current_positions(client=None):
     """Return {symbol: shares} for all open positions."""
     if client is None:
         client = _get_client()
-    return {p.symbol: int(p.qty) for p in client.get_all_positions()}
+    return {p.symbol: float(p.qty) for p in client.get_all_positions()}
 
 
 def place_order(symbol, side, notional, client=None):
