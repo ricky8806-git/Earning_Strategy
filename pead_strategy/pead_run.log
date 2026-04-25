@@ -1,21 +1,8 @@
-2026-04-25 16:11:23,002 INFO === PEAD daily run: 2026-04-25 ===
-2026-04-25 16:11:23,003 INFO Loaded 3 open trades
-2026-04-25 16:11:42,835 ERROR BRK.B: No earnings dates found, symbol may be delisted
-2026-04-25 16:13:32,941 INFO Active positions: ['NTRS', 'TXN', 'WST']
-2026-04-25 16:13:32,941 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
-Traceback (most recent call last):
-  File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/main.py", line 239, in <module>
-    run()
-  File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/main.py", line 227, in run
-    account         = get_account()
-                      ^^^^^^^^^^^^^
-  File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/broker.py", line 19, in get_account
-    'positions':       get_current_positions(client=client),
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/broker.py", line 27, in get_current_positions
-    return {p.symbol: int(p.qty) for p in client.get_all_positions()}
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/broker.py", line 27, in <dictcomp>
-    return {p.symbol: int(p.qty) for p in client.get_all_positions()}
-                      ^^^^^^^^^^
-ValueError: invalid literal for int() with base 10: '86.10782722'
+2026-04-25 16:14:55,580 INFO === PEAD daily run: 2026-04-25 ===
+2026-04-25 16:14:55,581 INFO Loaded 3 open trades
+2026-04-25 16:15:20,539 ERROR BRK.B: No earnings dates found, symbol may be delisted
+2026-04-25 16:17:34,448 INFO Active positions: ['NTRS', 'TXN', 'WST']
+2026-04-25 16:17:34,448 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
+2026-04-25 16:17:35,207 INFO Rebalance complete (portfolio_value=205506.36)
+2026-04-25 16:17:35,209 INFO State saved
+2026-04-25 16:17:35,216 INFO No state changes to push
