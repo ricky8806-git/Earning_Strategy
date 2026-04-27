@@ -2,7 +2,7 @@
 from alpaca.trading.client   import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums    import OrderSide, TimeInForce
-from config import ALPACA_API_KEY, ALPACA_SECRET_KEY
+from config import ALPACA_API_KEY, ALPACA_SECRET_KEY, REBALANCE_TOLERANCE
 
 
 def _get_client():
@@ -55,8 +55,10 @@ def rebalance(target_weights, portfolio_value, client=None):
     Bring the portfolio in line with target_weights.
 
     1. Close positions not in target_weights.
-    2. For each target position, buy/sell the difference between
-       current market value and desired notional.
+    2. For each target position, only trade if the current weight deviates
+       from the target by more than REBALANCE_TOLERANCE (default ±2%).
+       e.g. a 7% target won't trigger an order unless the position drifts
+       below 5% or above 9% of portfolio value.
     """
     if client is None:
         client = _get_client()
@@ -68,13 +70,14 @@ def rebalance(target_weights, portfolio_value, client=None):
         if symbol not in target_weights:
             close_position(symbol, client)
 
-    # Adjust target positions
+    # Adjust target positions only when drift exceeds the tolerance band
     for symbol, weight in target_weights.items():
         target_notional  = portfolio_value * weight
         current_notional = current.get(symbol, 0.0)
-        diff             = target_notional - current_notional
+        current_weight   = current_notional / portfolio_value if portfolio_value else 0.0
+        drift            = current_weight - weight
 
-        if diff > 10:            # Need to buy more
-            place_order(symbol, 'buy',  diff, client)
-        elif diff < -10:         # Need to sell some
-            place_order(symbol, 'sell', abs(diff), client)
+        if drift < -REBALANCE_TOLERANCE:      # Below lower band — buy up to target
+            place_order(symbol, 'buy',  target_notional - current_notional, client)
+        elif drift > REBALANCE_TOLERANCE:     # Above upper band — trim back to target
+            place_order(symbol, 'sell', current_notional - target_notional, client)
