@@ -35,6 +35,11 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
+# yfinance emits noisy ERROR-level messages when Yahoo Finance blocks the IP;
+# suppress those so strategy-level ERRORs remain readable.
+for _noisy in ('yfinance', 'peewee'):
+    logging.getLogger(_noisy).setLevel(logging.CRITICAL)
+
 _LOOKBACK_DAYS       = 90   # Days of price history to fetch for signal computation
 _STOP_PRICE_LOOKBACK = 45   # Days of price history to fetch for stop loss check
 
@@ -137,7 +142,10 @@ def run():
             continue
         seen_exits.add(sym)
         log.info(f"EXIT {sym} reason={reason}")
-        close_position(sym)
+        try:
+            close_position(sym)
+        except Exception as exc:
+            log.error(f"Could not close {sym} via broker (unreachable?): {exc} — recording exit in state anyway")
         trades_df = trades_df[trades_df['symbol'] != sym].reset_index(drop=True)
         action = 'EXIT_TIME' if reason == 'time' else 'EXIT_STOP'
         _append_log(today, sym, action, None, None, reason)
@@ -223,16 +231,20 @@ def run():
     log.info(f"Active positions: {active}")
     log.info(f"Target weights:   {target_weights}")
 
-    # 7. Rebalance
-    account         = get_account()
-    portfolio_value = account['portfolio_value']
-    rebalance(target_weights, portfolio_value)
-    log.info(f"Rebalance complete (portfolio_value={portfolio_value:.2f})")
-
-    # 8. Save state
-    save_state(trades_df)
-    log.info("State saved")
-    _push_state()
+    # 7. Rebalance — save state and push regardless of broker availability
+    try:
+        account         = get_account()
+        portfolio_value = account['portfolio_value']
+        rebalance(target_weights, portfolio_value)
+        log.info(f"Rebalance complete (portfolio_value={portfolio_value:.2f})")
+    except Exception as exc:
+        log.error(f"Broker unreachable — live rebalance skipped: {exc}")
+        log.info(f"[DRY-RUN] Target weights: {target_weights}")
+    finally:
+        # 8. Save state and push to git even when the broker is unavailable
+        save_state(trades_df)
+        log.info("State saved")
+        _push_state()
 
 
 if __name__ == '__main__':
