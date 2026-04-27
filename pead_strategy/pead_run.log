@@ -1,8 +1,7 @@
-2026-04-27 15:25:25,585 INFO === PEAD daily run: 2026-04-27 ===
-2026-04-27 15:25:25,587 INFO Loaded 3 open trades
-2026-04-27 15:25:52,488 ERROR BRK.B: No earnings dates found, symbol may be delisted
-2026-04-27 15:28:47,277 INFO Active positions: ['NTRS', 'TXN', 'WST']
-2026-04-27 15:28:47,278 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
-2026-04-27 15:28:47,472 INFO Rebalance complete (portfolio_value=204863.97)
-2026-04-27 15:28:47,473 INFO State saved
-2026-04-27 15:28:47,481 INFO No state changes to push
+2026-04-27 16:07:09,466 INFO === PEAD daily run: 2026-04-27 ===
+2026-04-27 16:07:09,467 INFO Loaded 3 open trades
+2026-04-27 16:09:35,534 INFO Active positions: ['NTRS', 'TXN', 'WST']
+2026-04-27 16:09:35,534 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
+2026-04-27 16:09:35,850 INFO Rebalance complete (portfolio_value=205096.34)
+2026-04-27 16:09:35,852 INFO State saved
+2026-04-27 16:09:35,860 INFO No state changes to push
