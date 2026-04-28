@@ -1,8 +1,8 @@
 # pead_strategy/config.py
 import os
 
-ALPACA_API_KEY    = os.environ.get('ALPACA_API_KEY', 'PK7DIKPAX7ROEFTQDIVVDX74FC')
-ALPACA_SECRET_KEY = os.environ.get('ALPACA_SECRET_KEY', 'G1trxNG5J5P9QzeinvbCLogG6g4TYQibfGqhfVTQS1hp')
+ALPACA_API_KEY    = os.environ.get('ALPACA_API_KEY', 'PKSZD3B3J3VRMK4DD3FWBNJWUT')
+ALPACA_SECRET_KEY = os.environ.get('ALPACA_SECRET_KEY', 'BuwgJ8YWRsEMwB5u5KG2CKwr3HiqvkSJUkndrm4yugqK')
 ALPACA_BASE_URL   = "https://paper-api.alpaca.markets"
 
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')
