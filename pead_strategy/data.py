@@ -47,10 +47,23 @@ _EARNINGS_EMPTY = pd.DataFrame(
 
 
 def get_earnings(symbol):
-    """Fetch earnings history from yfinance. Returns DataFrame with standardised columns."""
+    """Fetch earnings history from yfinance. Returns DataFrame with standardised columns.
+
+    Rows where eps_actual is NaN are kept — they represent very recent announcements
+    where yfinance hasn't yet populated the actual figure (data lag).  Callers must
+    check for NaN eps_actual before computing the beat ratio.
+    """
+    import logging as _logging
+    _log = _logging.getLogger(__name__)
     ticker = yf.Ticker(symbol)
     try:
-        df = ticker.earnings_dates
+        # get_earnings_dates(limit=20) returns ~5 years of history; the bare
+        # .earnings_dates property defaults to 12 quarters and can miss recent dates.
+        try:
+            df = ticker.get_earnings_dates(limit=20)
+        except TypeError:
+            df = ticker.earnings_dates  # fallback for older yfinance
+
         if df is None or (hasattr(df, 'empty') and df.empty):
             return _EARNINGS_EMPTY.copy()
 
@@ -76,8 +89,11 @@ def get_earnings(symbol):
             .dt.tz_localize(None)
             .dt.date
         )
-        df = df.dropna(subset=['eps_estimate', 'eps_actual'])
+        # Only require eps_estimate (needed for beat ratio); keep NaN eps_actual rows
+        # so very recent earnings dates survive to be matched by the scan window check.
+        df = df.dropna(subset=['eps_estimate'])
         return df[['earnings_date', 'eps_estimate', 'eps_actual', 'surprise_pct']].reset_index(drop=True)
 
-    except Exception:
+    except Exception as exc:
+        _log.warning(f"get_earnings({symbol}) failed: {exc}")
         return _EARNINGS_EMPTY.copy()
