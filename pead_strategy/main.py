@@ -158,19 +158,43 @@ def run():
     two_days_ago = sched.index[-2].date() if len(sched) >= 2 else yesterday - timedelta(days=1)
     scan_plan    = [(yesterday, 'd0'), (two_days_ago, 'd1')]
 
-    symbols    = get_sp500_symbols()
-    new_trades = []
+    symbols      = get_sp500_symbols()
+    new_trades   = []
     already_open = set(trades_df['symbol'].tolist())
 
-    for sym in symbols:
-        if sym in already_open:
-            continue
-        try:
-            earnings = get_earnings(sym)
-            if earnings.empty:
-                _append_log(today, sym, 'SKIP_NO_DATA', None, None, 'no_earnings_data')
-                continue
+    # --- Data quality gate ---
+    # Prefetch all earnings before scanning so a systemic fetch failure (missing
+    # dependency, Yahoo rate-limit, etc.) is caught and logged before any analysis.
+    scan_candidates = [s for s in symbols if s not in already_open]
+    log.info(f"Prefetching earnings data for {len(scan_candidates)} symbols...")
+    earnings_cache: dict = {}
+    for sym in scan_candidates:
+        data = get_earnings(sym)
+        if not data.empty:
+            earnings_cache[sym] = data
 
+    fetched      = len(earnings_cache)
+    total        = len(scan_candidates)
+    success_rate = fetched / total if total else 1.0
+    log.info(
+        f"Earnings prefetch: {fetched}/{total} symbols returned data "
+        f"({success_rate * 100:.0f}% success rate)"
+    )
+    if success_rate < 0.20:
+        log.critical(
+            f"DATA QUALITY GATE FAILED: only {success_rate * 100:.0f}% of symbols have "
+            f"earnings data. Systemic fetch failure suspected — new-signal scan aborted. "
+            f"Existing positions will still be checked and rebalanced."
+        )
+        scan_candidates = []  # skip the signal scan entirely
+
+    for sym in scan_candidates:
+        earnings = earnings_cache.get(sym)
+        if earnings is None:
+            _append_log(today, sym, 'SKIP_NO_DATA', None, None, 'no_earnings_data')
+            continue
+
+        try:
             earnings['earnings_date'] = pd.to_datetime(earnings['earnings_date'])
 
             price_start = (two_days_ago - timedelta(days=_LOOKBACK_DAYS)).isoformat()
