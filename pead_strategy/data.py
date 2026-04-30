@@ -57,12 +57,9 @@ def get_earnings(symbol):
     _log = _logging.getLogger(__name__)
     ticker = yf.Ticker(symbol)
     try:
-        # get_earnings_dates(limit=20) returns ~5 years of history; the bare
-        # .earnings_dates property defaults to 12 quarters and can miss recent dates.
-        try:
-            df = ticker.get_earnings_dates(limit=20)
-        except TypeError:
-            df = ticker.earnings_dates  # fallback for older yfinance
+        # .earnings_dates uses a JSON endpoint (no lxml needed) and returns 12 quarters,
+        # which is far more history than the 2-day scan window requires.
+        df = ticker.earnings_dates
 
         if df is None or (hasattr(df, 'empty') and df.empty):
             return _EARNINGS_EMPTY.copy()
