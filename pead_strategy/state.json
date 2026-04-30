@@ -23,6 +23,30 @@
       "stop_price": 284.40000000000003,
       "eps_beat_pct": 26.785714285714285,
       "earnings_date": "2026-04-23"
+    },
+    {
+      "symbol": "APH",
+      "entry_date": "2026-04-30",
+      "entry_price": 151.94000244140625,
+      "stop_price": 136.74600219726562,
+      "eps_beat_pct": 11.578947368421064,
+      "earnings_date": "2026-04-29"
+    },
+    {
+      "symbol": "FFIV",
+      "entry_date": "2026-04-30",
+      "entry_price": 327.5400085449219,
+      "stop_price": 294.7860076904297,
+      "eps_beat_pct": 12.716763005780345,
+      "earnings_date": "2026-04-28"
+    },
+    {
+      "symbol": "STX",
+      "entry_date": "2026-04-30",
+      "entry_price": 654.614990234375,
+      "stop_price": 589.1534912109375,
+      "eps_beat_pct": 16.477272727272716,
+      "earnings_date": "2026-04-28"
     }
   ]
 }
