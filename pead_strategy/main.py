@@ -25,7 +25,7 @@ import pandas as pd
 from broker    import close_position, get_account, rebalance
 from data      import get_earnings, get_prices, get_sp500_symbols
 from portfolio import check_exits, get_active_positions, get_portfolio_weights
-from signals   import build_signals
+from signals   import build_signals, get_miss_reason
 from state     import load_state, save_state
 from config    import LOG_FILE, GITHUB_TOKEN
 
@@ -168,6 +168,7 @@ def run():
         try:
             earnings = get_earnings(sym)
             if earnings.empty:
+                _append_log(today, sym, 'SKIP_NO_DATA', None, None, 'no_earnings_data')
                 continue
 
             earnings['earnings_date'] = pd.to_datetime(earnings['earnings_date'])
@@ -194,9 +195,10 @@ def run():
                 signals = build_signals(recent, prices)
                 signals = signals[signals['trigger_day'] == trigger_type]
                 if signals.empty:
+                    reason = get_miss_reason(recent, prices, trigger_type)
                     _append_log(today, sym, 'SCAN_MISS', None,
                                 recent['eps_actual'].iloc[0] if len(recent) else None,
-                                'no_signal')
+                                reason)
                     continue
 
                 for _, row in signals.iterrows():
