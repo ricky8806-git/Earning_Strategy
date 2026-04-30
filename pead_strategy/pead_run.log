@@ -1,7 +1,7 @@
-2026-04-30 15:29:02,594 INFO === PEAD daily run: 2026-04-30 ===
-2026-04-30 15:29:02,595 INFO Loaded 3 open trades
-2026-04-30 15:31:35,501 INFO Active positions: ['NTRS', 'TXN', 'WST']
-2026-04-30 15:31:35,501 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
-2026-04-30 15:31:35,718 INFO Rebalance complete (portfolio_value=205497.40)
-2026-04-30 15:31:35,720 INFO State saved
-2026-04-30 15:31:35,727 INFO No state changes to push
+2026-04-30 15:59:22,892 INFO === PEAD daily run: 2026-04-30 ===
+2026-04-30 15:59:22,893 INFO Loaded 3 open trades
+2026-04-30 16:01:46,190 INFO Active positions: ['NTRS', 'TXN', 'WST']
+2026-04-30 16:01:46,190 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'SPY': 0.79}
+2026-04-30 16:01:46,424 INFO Rebalance complete (portfolio_value=205404.61)
+2026-04-30 16:01:46,425 INFO State saved
+2026-04-30 16:01:46,432 INFO No state changes to push
