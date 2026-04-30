@@ -1,0 +1,64 @@
+name: PEAD Backfill (lxml outage catchup)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: pead_strategy/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r pead_strategy/requirements.txt -q
+
+      - name: Run backfill
+        env:
+          ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          GITHUB_TOKEN:      ${{ secrets.GH_PAT }}
+        working-directory: pead_strategy
+        run: python backfill.py 2>&1 | tee ../backfill_run.log; exit ${PIPESTATUS[0]}
+
+      - name: Push state and log via GitHub API
+        if: always()
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          for FILE in pead_strategy/state.json pead_strategy/trades_log.csv backfill_run.log; do
+            [ -f "$FILE" ] || continue
+            CONTENT=$(base64 -w 0 "$FILE")
+            SHA=$(curl -s -H "Authorization: Bearer $GH_PAT" \
+              "https://api.github.com/repos/ricky8806-git/Earning_Strategy/contents/$FILE" \
+              | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('sha',''))" 2>/dev/null || true)
+            BODY="{\"message\":\"backfill: state update [skip ci]\",\"content\":\"$CONTENT\""
+            [ -n "$SHA" ] && BODY="$BODY,\"sha\":\"$SHA\""
+            BODY="$BODY}"
+            curl -s -X PUT \
+              -H "Authorization: Bearer $GH_PAT" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/ricky8806-git/Earning_Strategy/contents/$FILE" \
+              -d "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Pushed:', d.get('content',{}).get('name','?'))"
+          done
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backfill-logs-${{ github.run_id }}
+          path: |
+            pead_strategy/state.json
+            pead_strategy/trades_log.csv
+            backfill_run.log
+          retention-days: 90
