@@ -122,3 +122,59 @@ def build_signals(events_df, prices_df):
     result = pd.concat(parts, ignore_index=True)
     result['stop_price'] = result['entry_open'] * (1 - STOP_LOSS_PCT)
     return result[_SIGNALS_COLS].reset_index(drop=True)
+
+
+def get_miss_reason(events_df, prices_df, trigger_type):
+    """
+    Return a short human-readable string describing the first filter that blocked
+    a signal.  Called only when build_signals() already returned empty.
+
+    Possible return values (may be combined with '+'):
+        no_price_match   — earnings date not found in price data
+        zero_estimate    — EPS estimate is zero/near-zero
+        eps_low:<X>%     — EPS beat below threshold
+        price_low:<X>%   — day0 (or d1) return below threshold
+        vol_low:<X>x     — volume below 2× avg20
+    """
+    featured = compute_features(prices_df)
+    featured['date'] = pd.to_datetime(featured['date'])
+    events = events_df.copy()
+    events['earnings_date'] = pd.to_datetime(events['earnings_date'])
+
+    merged = events.merge(featured, left_on='earnings_date', right_on='date', how='inner')
+    if merged.empty:
+        return 'no_price_match'
+
+    merged = merged[merged['eps_estimate'].abs() > 0.001].copy()
+    if merged.empty:
+        return 'zero_estimate'
+
+    merged['eps_beat_pct'] = (
+        (merged['eps_actual'] - merged['eps_estimate'])
+        / merged['eps_estimate'].abs() * 100
+    )
+    row = merged.iloc[0]
+
+    if row['eps_beat_pct'] < EPS_BEAT_MIN_PCT:
+        return f'eps_low:{row["eps_beat_pct"]:.1f}%'
+
+    # EPS passed — diagnose price/volume gate
+    if trigger_type == 'd0':
+        parts = []
+        if row['day0_ret'] < DAY0_RET_MIN:
+            parts.append(f'price_low:{row["day0_ret"] * 100:.1f}%')
+        avg_vol = row['avg20_vol'] if row['avg20_vol'] > 0 else float('nan')
+        vol_ratio = row['volume'] / avg_vol if avg_vol == avg_vol else 0
+        if vol_ratio < VOLUME_MULT:
+            parts.append(f'vol_low:{vol_ratio:.1f}x')
+        return '+'.join(parts) if parts else 'unknown'
+    else:  # d1
+        d1_ret = (row['d1_close'] - row['prior_close']) / row['prior_close'] if row['prior_close'] else 0
+        avg_vol = row['avg20_vol'] if row['avg20_vol'] > 0 else float('nan')
+        vol_ratio = row['d1_volume'] / avg_vol if avg_vol == avg_vol else 0
+        parts = []
+        if d1_ret < DAY0_RET_MIN:
+            parts.append(f'price_low:{d1_ret * 100:.1f}%')
+        if vol_ratio < VOLUME_MULT:
+            parts.append(f'vol_low:{vol_ratio:.1f}x')
+        return '+'.join(parts) if parts else 'unknown'
