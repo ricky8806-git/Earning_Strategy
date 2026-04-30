@@ -182,6 +182,13 @@ def run():
                 if recent.empty:
                     continue
 
+                # yfinance data lag: date present but eps_actual not yet populated
+                if recent['eps_actual'].isna().all():
+                    _append_log(today, sym, 'SCAN_MISS', None, None, 'no_eps_actual_yet')
+                    continue
+
+                recent = recent.dropna(subset=['eps_actual'])
+
                 if prices is None:
                     prices = get_prices(sym, price_start, price_end)
                     if prices.empty:
