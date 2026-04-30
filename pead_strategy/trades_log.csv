@@ -504,3 +504,17 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-04-30,TYL,SCAN_MISS,,3.09,eps_low:2.7%
 2026-04-30,V,SCAN_MISS,,3.31,eps_low:6.8%
 2026-04-30,ZBH,SCAN_MISS,,2.09,price_low:-13.5%
+2026-04-30,HCA,BACKFILL_MISS,,7.15,"eps_low:0.3%,earnings=2026-04-24"
+2026-04-30,ACGL,BACKFILL_MISS,,2.5,"eps_low:1.6%,earnings=2026-04-28"
+2026-04-30,CNC,BACKFILL_MISS,,3.37,"vol_low:0.0x,earnings=2026-04-28"
+2026-04-30,GLW,BACKFILL_MISS,,0.7,"eps_low:1.4%,earnings=2026-04-28"
+2026-04-30,FICO,BACKFILL_MISS,,12.5,"price_low:-0.3%+vol_low:0.0x,earnings=2026-04-28"
+2026-04-30,BEN,BACKFILL_MISS,,0.71,"vol_low:0.0x,earnings=2026-04-28"
+2026-04-30,INCY,BACKFILL_MISS,,1.81,"price_low:2.1%+vol_low:0.0x,earnings=2026-04-28"
+2026-04-30,IVZ,BACKFILL_MISS,,0.57,"eps_low:-1.7%,earnings=2026-04-28"
+2026-04-30,NXPI,BACKFILL_MISS,,3.05,"eps_low:2.7%,earnings=2026-04-28"
+2026-04-30,HOOD,BACKFILL_MISS,,0.38,"eps_low:-2.6%,earnings=2026-04-28"
+2026-04-30,SPGI,BACKFILL_MISS,,4.97,"eps_low:3.1%,earnings=2026-04-28"
+2026-04-30,TER,BACKFILL_MISS,,2.56,"price_low:-5.4%+vol_low:0.0x,earnings=2026-04-28"
+2026-04-30,V,BACKFILL_MISS,,3.31,"eps_low:6.8%,earnings=2026-04-28"
+2026-04-30,ZBH,BACKFILL_MISS,,2.09,"price_low:-10.6%+vol_low:0.0x,earnings=2026-04-28"
