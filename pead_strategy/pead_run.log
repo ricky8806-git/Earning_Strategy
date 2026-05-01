@@ -1,9 +1,11 @@
-2026-04-30 21:01:57,555 INFO === PEAD daily run: 2026-04-30 ===
-2026-04-30 21:01:57,556 INFO Loaded 3 open trades
-2026-04-30 21:02:10,087 INFO SIGNAL APH  eps_beat=11.6%  trigger=d0  stop=136.75
-2026-04-30 21:03:00,527 INFO SIGNAL FFIV  eps_beat=12.7%  trigger=d1  stop=294.79
-2026-04-30 21:04:10,650 INFO SIGNAL STX  eps_beat=16.5%  trigger=d1  stop=589.15
-2026-04-30 21:04:37,810 INFO Active positions: ['NTRS', 'TXN', 'WST', 'APH', 'FFIV', 'STX']
-2026-04-30 21:04:37,810 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'APH': 0.07, 'FFIV': 0.07, 'STX': 0.07, 'SPY': 0.58}
-2026-04-30 21:04:38,623 INFO Rebalance complete (portfolio_value=206566.30)
-2026-04-30 21:04:38,624 INFO State saved
+2026-05-01 14:38:34,046 INFO === PEAD daily run: 2026-05-01 ===
+2026-05-01 14:38:34,048 INFO Loaded 6 open trades
+2026-05-01 14:38:36,187 INFO Prefetching earnings data for 201 symbols...
+2026-05-01 14:41:17,401 INFO Earnings prefetch: 200/201 symbols returned data (100% success rate)
+2026-05-01 14:41:20,097 INFO SIGNAL BAX  eps_beat=16.1%  trigger=d0  stop=16.06
+2026-05-01 14:41:20,661 INFO SIGNAL BMY  eps_beat=11.3%  trigger=d0  stop=54.02
+2026-05-01 14:41:24,328 INFO SIGNAL LLY  eps_beat=25.9%  trigger=d0  stop=854.06
+2026-05-01 14:41:28,068 INFO Active positions: ['NTRS', 'TXN', 'WST', 'APH', 'FFIV', 'STX', 'BAX', 'BMY', 'LLY']
+2026-05-01 14:41:28,068 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'APH': 0.07, 'FFIV': 0.07, 'STX': 0.07, 'BAX': 0.07, 'BMY': 0.07, 'LLY': 0.07, 'SPY': 0.3699999999999999}
+2026-05-01 14:41:28,843 INFO Rebalance complete (portfolio_value=207633.57)
+2026-05-01 14:41:28,844 INFO State saved
