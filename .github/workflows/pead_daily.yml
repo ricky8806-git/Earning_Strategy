@@ -2,9 +2,8 @@ name: PEAD Daily Run
 
 on:
   schedule:
-    # 9:31 AM ET — 13:31 UTC (EDT, Mar–Nov) and 14:31 UTC (EST, Nov–Mar)
-    # Running both so the trigger is correct year-round
-    - cron: '31 13 * * 1-5'
+    # 14:31 UTC = 9:31 AM EST (winter) / 10:31 AM EDT (summer)
+    # Single trigger avoids the double-run caused by two DST-aware crons
     - cron: '31 14 * * 1-5'
   workflow_dispatch: {}   # allow manual trigger from the Actions tab
 
