@@ -47,6 +47,30 @@
       "stop_price": 589.1534912109375,
       "eps_beat_pct": 16.477272727272716,
       "earnings_date": "2026-04-28"
+    },
+    {
+      "symbol": "BAX",
+      "entry_date": "2026-05-01",
+      "entry_price": 17.84000015258789,
+      "stop_price": 16.056000137329104,
+      "eps_beat_pct": 16.129032258064512,
+      "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "BMY",
+      "entry_date": "2026-05-01",
+      "entry_price": 60.02000045776367,
+      "stop_price": 54.01800041198731,
+      "eps_beat_pct": 11.267605633802827,
+      "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "LLY",
+      "entry_date": "2026-05-01",
+      "entry_price": 948.9500122070312,
+      "stop_price": 854.0550109863282,
+      "eps_beat_pct": 25.92047128129603,
+      "earnings_date": "2026-04-30"
     }
   ]
 }
