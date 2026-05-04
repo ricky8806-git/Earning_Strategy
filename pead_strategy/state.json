@@ -71,6 +71,38 @@
       "stop_price": 854.0550109863282,
       "eps_beat_pct": 25.92047128129603,
       "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "AIG",
+      "entry_date": "2026-05-04",
+      "entry_price": 78.0,
+      "stop_price": 70.2,
+      "eps_beat_pct": 12.23404255319149,
+      "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "DXCM",
+      "entry_date": "2026-05-04",
+      "entry_price": 61.61000061035156,
+      "stop_price": 55.44900054931641,
+      "eps_beat_pct": 19.148936170212785,
+      "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "FSLR",
+      "entry_date": "2026-05-04",
+      "entry_price": 212.0,
+      "stop_price": 190.8,
+      "eps_beat_pct": 13.780918727915198,
+      "earnings_date": "2026-04-30"
+    },
+    {
+      "symbol": "WDC",
+      "entry_date": "2026-05-04",
+      "entry_price": 430.7300109863281,
+      "stop_price": 387.6570098876953,
+      "eps_beat_pct": 283.17757009345786,
+      "earnings_date": "2026-04-30"
     }
   ]
 }
