@@ -2,11 +2,12 @@
 from alpaca.trading.client   import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums    import OrderSide, TimeInForce
-from config import ALPACA_API_KEY, ALPACA_SECRET_KEY, REBALANCE_TOLERANCE
+from config import ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_BASE_URL, REBALANCE_TOLERANCE
 
 
 def _get_client():
-    return TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=True)
+    return TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=True,
+                         url_override=ALPACA_BASE_URL)
 
 
 def get_account():

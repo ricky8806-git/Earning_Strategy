@@ -72,6 +72,50 @@ def _fetch_prices_for_positions(symbols, today):
 repo_root = Path(__file__).resolve().parent.parent
 
 
+def _connectivity_report():
+    """
+    Quick pre-flight check of key API endpoints.
+
+    Yahoo Finance uses server-side IP allowlisting; if this host is not allowed,
+    ALL yfinance calls (prices + earnings) will fail with HTTP 403.  The fix is
+    either to run the strategy from an allowlisted IP, or to set the env var
+    YF_OAUTH2_REFRESH_TOKEN to a valid Yahoo Finance OAuth refresh token so
+    yfinance can authenticate without a crumb fetch.
+
+    Alpaca paper API has the same restriction.  The fix is to run from an
+    allowlisted IP or to contact Alpaca support.
+
+    Returns (yahoo_ok: bool, alpaca_ok: bool).
+    """
+    import urllib.request, urllib.error
+
+    def _probe(name, url):
+        try:
+            urllib.request.urlopen(url, timeout=6)
+            log.info(f"  connectivity OK: {name}")
+            return True
+        except urllib.error.HTTPError as e:
+            body = e.read(200).decode(errors='replace')
+            if 'allowlist' in body.lower():
+                log.error(
+                    f"  connectivity BLOCKED: {name} — "
+                    f"HTTP {e.code}, this IP is not in {name}'s allowlist.  "
+                    f"{'Set YF_OAUTH2_REFRESH_TOKEN env var with a valid Yahoo Finance OAuth token, or ' if 'yahoo' in name.lower() else ''}"
+                    f"run the strategy from an allowlisted IP or use a VPN/proxy."
+                )
+            else:
+                log.warning(f"  connectivity degraded: {name} — HTTP {e.code}")
+            return False
+        except Exception as exc:
+            log.warning(f"  connectivity check failed: {name} — {exc}")
+            return False
+
+    log.info("Pre-flight connectivity check:")
+    yahoo_ok  = _probe('Yahoo Finance', 'https://query2.finance.yahoo.com')
+    alpaca_ok = _probe('Alpaca paper API', 'https://paper-api.alpaca.markets')
+    return yahoo_ok, alpaca_ok
+
+
 def _push_state():
     """Commit state.json and trades_log.csv back to the remote repo."""
     if not GITHUB_TOKEN:
@@ -123,6 +167,7 @@ def run():
     )
     yesterday = sched.index[-1].date() if not sched.empty else today - timedelta(days=1)
     log.info(f"=== PEAD daily run: {today} ===")
+    yahoo_ok, alpaca_ok = _connectivity_report()
 
     # 1. Load persisted state
     trades_df = load_state()
@@ -131,6 +176,12 @@ def run():
     # 2. Fetch latest prices for open positions (for stop loss check)
     active_symbols = trades_df['symbol'].tolist() if not trades_df.empty else []
     prices_dict    = _fetch_prices_for_positions(active_symbols, today)
+    missing_prices = [s for s in active_symbols if s not in prices_dict]
+    if missing_prices:
+        log.warning(
+            f"Price data unavailable for {len(missing_prices)}/{len(active_symbols)} positions "
+            f"— stop-loss check is degraded (positions will not be force-exited): {missing_prices}"
+        )
 
     # 3. Check exits (time exit OR stop loss)
     exited = check_exits(trades_df, prices_dict, today)
@@ -181,10 +232,16 @@ def run():
         f"({success_rate * 100:.0f}% success rate)"
     )
     if success_rate < 0.20:
+        likely_cause = (
+            "this IP is not in Yahoo Finance's allowlist (HTTP 403). "
+            "Fix: set YF_OAUTH2_REFRESH_TOKEN env var with a valid Yahoo Finance OAuth "
+            "refresh token, or run from an allowlisted IP / VPN."
+            if not yahoo_ok else "yfinance returned no data for most symbols"
+        )
         log.critical(
             f"DATA QUALITY GATE FAILED: only {success_rate * 100:.0f}% of symbols have "
-            f"earnings data. Systemic fetch failure suspected — new-signal scan aborted. "
-            f"Existing positions will still be checked and rebalanced."
+            f"earnings data — likely cause: {likely_cause}  "
+            f"New-signal scan aborted; existing positions will still be managed."
         )
         scan_candidates = []  # skip the signal scan entirely
 
