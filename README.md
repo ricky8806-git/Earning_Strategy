@@ -41,27 +41,13 @@ All tests mock external dependencies — no API calls or market data needed.
 
 ## Running in Paper Mode
 
-### One-time run (manual)
+### Scheduled (automatic via GitHub Actions)
 
-```bash
-cd pead_strategy
-python main.py
-```
+The strategy runs automatically every weekday at 14:31 UTC (9:31 AM EST / 10:31 AM EDT) via the `pead_daily.yml` workflow. No manual intervention needed.
 
-Runs the full daily cycle: check exits → scan earnings → rebalance.
+To trigger a run manually, use the **Run workflow** button in the GitHub Actions tab.
 
-### Scheduled (automatic)
-
-```bash
-cd pead_strategy
-python scheduler.py
-```
-
-Runs as a long-lived process, triggering:
-- **09:31 ET** — main.py (market open, place orders)
-- **18:00 ET** — evening pre-scan log
-
-Keep the terminal open (or run in a background service / screen session).
+> **Note**: `python main.py` requires direct access to Yahoo Finance and Alpaca APIs. It will not work from environments that proxy or restrict outbound HTTP (e.g. Claude Code). Use GitHub Actions for all executions.
 
 ### Validate against backtest
 
