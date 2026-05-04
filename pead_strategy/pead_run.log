@@ -1,8 +1,15 @@
-2026-05-01 15:32:07,698 INFO === PEAD daily run: 2026-05-01 ===
-2026-05-01 15:32:07,700 INFO Loaded 9 open trades
-2026-05-01 15:32:09,781 INFO Prefetching earnings data for 198 symbols...
-2026-05-01 15:34:30,874 INFO Earnings prefetch: 197/198 symbols returned data (99% success rate)
-2026-05-01 15:34:37,086 INFO Active positions: ['NTRS', 'TXN', 'WST', 'APH', 'FFIV', 'STX', 'BAX', 'BMY', 'LLY']
-2026-05-01 15:34:37,086 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'APH': 0.07, 'FFIV': 0.07, 'STX': 0.07, 'BAX': 0.07, 'BMY': 0.07, 'LLY': 0.07, 'SPY': 0.3699999999999999}
-2026-05-01 15:34:37,505 INFO Rebalance complete (portfolio_value=207365.43)
-2026-05-01 15:34:37,507 INFO State saved
+2026-05-04 16:17:49,310 INFO === PEAD daily run: 2026-05-04 ===
+2026-05-04 16:17:49,310 INFO Pre-flight connectivity check:
+2026-05-04 16:17:49,366 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-05-04 16:17:49,419 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-05-04 16:17:49,420 INFO Loaded 9 open trades
+2026-05-04 16:17:51,942 INFO Prefetching earnings data for 198 symbols...
+2026-05-04 16:20:21,567 INFO Earnings prefetch: 197/198 symbols returned data (99% success rate)
+2026-05-04 16:20:21,823 INFO SIGNAL AIG  eps_beat=12.2%  trigger=d1  stop=70.20
+2026-05-04 16:20:24,024 INFO SIGNAL DXCM  eps_beat=19.1%  trigger=d1  stop=55.45
+2026-05-04 16:20:24,199 INFO SIGNAL FSLR  eps_beat=13.8%  trigger=d1  stop=190.80
+2026-05-04 16:20:27,451 INFO SIGNAL WDC  eps_beat=283.2%  trigger=d1  stop=387.66
+2026-05-04 16:20:27,646 INFO Active positions: ['NTRS', 'TXN', 'WST', 'APH', 'FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC']
+2026-05-04 16:20:27,646 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'APH': 0.07, 'FFIV': 0.07, 'STX': 0.07, 'BAX': 0.07, 'BMY': 0.07, 'LLY': 0.07, 'AIG': 0.07, 'DXCM': 0.07, 'FSLR': 0.07, 'WDC': 0.07, 'SPY': 0.08999999999999986}
+2026-05-04 16:20:27,884 INFO Rebalance complete (portfolio_value=206051.32)
+2026-05-04 16:20:27,886 INFO State saved
