@@ -251,7 +251,15 @@ def _push_state():
     push_url = f"https://x-access-token:{GITHUB_TOKEN}@github.com/ricky8806-git/Earning_Strategy.git"
     push = _git('push', push_url, 'main')
     if push.returncode != 0:
-        log.warning(f"git push failed: {push.stderr.strip()}")
+        # Remote may have new commits (another runner pushed first) — fetch-rebase and retry once
+        log.warning(f"git push failed (first attempt): {push.stderr.strip()[:120]}")
+        _git('fetch', push_url, 'main:refs/remotes/origin/main')
+        _git('rebase', 'refs/remotes/origin/main')
+        push2 = _git('push', push_url, 'main')
+        if push2.returncode != 0:
+            log.warning(f"git push failed (retry): {push2.stderr.strip()[:120]}")
+        else:
+            log.info("git push succeeded after rebase")
 
 
 def run():
