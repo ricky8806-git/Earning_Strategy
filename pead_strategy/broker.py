@@ -60,16 +60,20 @@ def rebalance(target_weights, portfolio_value, client=None):
        from the target by more than REBALANCE_TOLERANCE (default ±2%).
        e.g. a 7% target won't trigger an order unless the position drifts
        below 5% or above 9% of portfolio value.
+
+    Returns a list of order dicts: {symbol, action, notional}.
     """
     if client is None:
         client = _get_client()
 
     current = {p.symbol: float(p.market_value) for p in client.get_all_positions()}
+    orders  = []
 
     # Close positions that are no longer in the target
     for symbol in list(current.keys()):
         if symbol not in target_weights:
             close_position(symbol, client)
+            orders.append({'symbol': symbol, 'action': 'REBALANCE_CLOSE', 'notional': current[symbol]})
 
     # Adjust target positions only when drift exceeds the tolerance band
     for symbol, weight in target_weights.items():
@@ -80,5 +84,9 @@ def rebalance(target_weights, portfolio_value, client=None):
 
         if drift < -REBALANCE_TOLERANCE:      # Below lower band — buy up to target
             place_order(symbol, 'buy',  target_notional - current_notional, client)
+            orders.append({'symbol': symbol, 'action': 'REBALANCE_BUY',  'notional': target_notional - current_notional})
         elif drift > REBALANCE_TOLERANCE:     # Above upper band — trim back to target
             place_order(symbol, 'sell', current_notional - target_notional, client)
+            orders.append({'symbol': symbol, 'action': 'REBALANCE_SELL', 'notional': current_notional - target_notional})
+
+    return orders

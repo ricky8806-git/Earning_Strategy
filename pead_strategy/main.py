@@ -15,6 +15,7 @@ Flow:
   10. Log all actions to trades_log.csv
 """
 import csv
+import json
 import logging
 import subprocess
 from datetime import date, timedelta
@@ -116,8 +117,101 @@ def _connectivity_report():
     return yahoo_ok, alpaca_ok
 
 
+def _write_run_report(
+    today, is_live, yahoo_ok, alpaca_ok,
+    exited, new_trades, rebalance_orders,
+    trades_df, target_weights, portfolio_value,
+):
+    """Write a human-readable markdown run report to run_report.md."""
+    from portfolio import _NYSE
+
+    lines = []
+    lines.append(f"# PEAD Strategy Run Report")
+    lines.append(f"**Date:** {today}  ")
+    status = "LIVE" if is_live else "DRY-RUN (broker unreachable)"
+    lines.append(f"**Status:** {status}  ")
+    if portfolio_value is not None:
+        lines.append(f"**Portfolio value:** ${portfolio_value:,.2f}  ")
+    lines.append("")
+
+    lines.append("## Data Quality")
+    lines.append(f"- Yahoo Finance: {'OK' if yahoo_ok else 'BLOCKED (HTTP 403 — IP not allowlisted)'}  ")
+    lines.append(f"- Alpaca paper API: {'OK' if alpaca_ok else 'BLOCKED (HTTP 403 — IP not allowlisted)'}  ")
+    lines.append("")
+
+    lines.append("## Exits This Run")
+    if exited:
+        lines.append("| Symbol | Reason | Entry Date | Entry Price | Stop Price |")
+        lines.append("|--------|--------|------------|-------------|------------|")
+        for ex in exited:
+            sym = ex['symbol']
+            row = trades_df[trades_df['symbol'] == sym].iloc[0] if sym in trades_df['symbol'].values else {}
+            entry_date  = row.get('entry_date',  'n/a') if isinstance(row, dict) else row['entry_date']
+            entry_price = row.get('entry_price', 'n/a') if isinstance(row, dict) else row['entry_price']
+            stop_price  = row.get('stop_price',  'n/a') if isinstance(row, dict) else row['stop_price']
+            ep = f"${float(entry_price):,.2f}" if entry_price != 'n/a' else 'n/a'
+            sp = f"${float(stop_price):,.2f}"  if stop_price  != 'n/a' else 'n/a'
+            lines.append(f"| {sym} | {ex['reason']} | {entry_date} | {ep} | {sp} |")
+    else:
+        lines.append("_No exits this run._")
+    lines.append("")
+
+    lines.append("## New Entries This Run")
+    if new_trades:
+        lines.append("| Symbol | EPS Beat % | Entry Price | Stop Price | Earnings Date |")
+        lines.append("|--------|-----------|-------------|------------|---------------|")
+        for t in new_trades:
+            ep  = f"${float(t['entry_price']):,.2f}" if t.get('entry_price') else 'n/a'
+            sp  = f"${float(t['stop_price']):,.2f}"  if t.get('stop_price')  else 'n/a'
+            eps = f"{float(t['eps_beat_pct']):.1f}%" if t.get('eps_beat_pct') else 'n/a'
+            lines.append(f"| {t['symbol']} | {eps} | {ep} | {sp} | {t.get('earnings_date','n/a')} |")
+    else:
+        lines.append("_No new entries this run._")
+    lines.append("")
+
+    lines.append("## Rebalance Orders")
+    if rebalance_orders:
+        lines.append("| Symbol | Action | Notional |")
+        lines.append("|--------|--------|----------|")
+        for o in rebalance_orders:
+            lines.append(f"| {o['symbol']} | {o['action']} | ${o['notional']:,.2f} |")
+    elif is_live:
+        lines.append("_No orders placed (all positions within tolerance band)._")
+    else:
+        lines.append("_Dry-run — no orders placed._")
+    lines.append("")
+
+    lines.append("## Open Positions After Run")
+    if not trades_df.empty:
+        today_ts = pd.Timestamp(today)
+        lines.append("| Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |")
+        lines.append("|--------|------------|-------------|------------|-----------|-----------|")
+        for _, row in trades_df.iterrows():
+            entry_ts   = pd.Timestamp(row['entry_date'])
+            sched      = _NYSE.schedule(start_date=entry_ts, end_date=today_ts)
+            days_held  = max(0, len(sched) - 1)
+            ep  = f"${float(row['entry_price']):,.2f}" if pd.notna(row.get('entry_price')) else 'n/a'
+            sp  = f"${float(row['stop_price']):,.2f}"  if pd.notna(row.get('stop_price'))  else 'n/a'
+            eps = f"{float(row['eps_beat_pct']):.1f}%" if pd.notna(row.get('eps_beat_pct')) else 'n/a'
+            lines.append(f"| {row['symbol']} | {row['entry_date']} | {ep} | {sp} | {eps} | {days_held} |")
+    else:
+        lines.append("_No open positions._")
+    lines.append("")
+
+    lines.append("## Target Weights")
+    lines.append("| Symbol | Weight |")
+    lines.append("|--------|--------|")
+    for sym, w in sorted(target_weights.items(), key=lambda x: -x[1]):
+        lines.append(f"| {sym} | {w*100:.1f}% |")
+    lines.append("")
+
+    report_path = Path(LOG_FILE).parent / 'run_report.md'
+    report_path.write_text('\n'.join(lines))
+    log.info(f"Run report written to {report_path}")
+
+
 def _push_state():
-    """Commit state.json and trades_log.csv back to the remote repo."""
+    """Commit state.json, trades_log.csv, and run_report.md back to the remote repo."""
     if not GITHUB_TOKEN:
         log.warning("GITHUB_TOKEN is empty — skipping git push")
         return
@@ -138,7 +232,10 @@ def _push_state():
 
     _git('config', 'user.email', 'pead-bot@auto')
     _git('config', 'user.name', 'PEAD Bot')
-    _git('add', 'pead_strategy/state.json', 'pead_strategy/trades_log.csv')
+    _git('add',
+         'pead_strategy/state.json',
+         'pead_strategy/trades_log.csv',
+         'pead_strategy/run_report.md')
 
     diff = _git('diff', '--cached', '--quiet')
     if diff.returncode == 0:
@@ -184,14 +281,16 @@ def run():
         )
 
     # 3. Check exits (time exit OR stop loss)
-    exited = check_exits(trades_df, prices_dict, today)
+    exited_raw = check_exits(trades_df, prices_dict, today)
+    exited: list = []          # de-duped exit list (for report)
     seen_exits: set = set()
-    for exit_info in exited:
+    for exit_info in exited_raw:
         sym    = exit_info['symbol']
         reason = exit_info['reason']
         if sym in seen_exits:
             continue
         seen_exits.add(sym)
+        exited.append(exit_info)
         log.info(f"EXIT {sym} reason={reason}")
         try:
             close_position(sym)
@@ -322,18 +421,36 @@ def run():
     log.info(f"Target weights:   {target_weights}")
 
     # 7. Rebalance — save state and push regardless of broker availability
+    rebalance_orders: list = []
+    is_live         = False
+    portfolio_value = None
     try:
         account         = get_account()
         portfolio_value = account['portfolio_value']
-        rebalance(target_weights, portfolio_value)
+        rebalance_orders = rebalance(target_weights, portfolio_value)
+        is_live          = True
         log.info(f"Rebalance complete (portfolio_value={portfolio_value:.2f})")
+        for o in rebalance_orders:
+            _append_log(today, o['symbol'], o['action'], o['notional'], None)
     except Exception as exc:
         log.error(f"Broker unreachable — live rebalance skipped: {exc}")
         log.info(f"[DRY-RUN] Target weights: {target_weights}")
     finally:
-        # 8. Save state and push to git even when the broker is unavailable
+        # 8. Save state, write report, and push to git even when broker is unavailable
         save_state(trades_df)
         log.info("State saved")
+        _write_run_report(
+            today           = today,
+            is_live         = is_live,
+            yahoo_ok        = yahoo_ok,
+            alpaca_ok       = alpaca_ok,
+            exited          = exited,
+            new_trades      = new_trades,
+            rebalance_orders= rebalance_orders,
+            trades_df       = trades_df,
+            target_weights  = target_weights,
+            portfolio_value = portfolio_value,
+        )
         _push_state()
 
 
