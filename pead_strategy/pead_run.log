@@ -1,14 +1,15 @@
-2026-05-06 16:14:08,909 INFO === PEAD daily run: 2026-05-06 ===
-2026-05-06 16:14:08,909 INFO Pre-flight connectivity check:
-2026-05-06 16:14:08,971 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-05-06 16:14:09,102 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-05-06 16:14:09,104 INFO Loaded 13 open trades
-2026-05-06 16:14:12,151 INFO EXIT APH reason=stop_loss
-2026-05-06 16:14:12,258 INFO Prefetching earnings data for 195 symbols...
-2026-05-06 16:16:43,835 INFO Earnings prefetch: 194/195 symbols returned data (99% success rate)
-2026-05-06 16:16:47,050 INFO SIGNAL SWKS  eps_beat=10.6%  trigger=d0  stop=61.20
-2026-05-06 16:16:47,727 INFO SIGNAL WAT  eps_beat=16.9%  trigger=d0  stop=309.60
-2026-05-06 16:16:47,734 INFO Active positions: ['NTRS', 'TXN', 'WST', 'FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT']
-2026-05-06 16:16:47,734 INFO Target weights:   {'NTRS': 0.07, 'TXN': 0.07, 'WST': 0.07, 'FFIV': 0.07, 'STX': 0.07, 'BAX': 0.07, 'BMY': 0.07, 'LLY': 0.07, 'AIG': 0.07, 'DXCM': 0.07, 'FSLR': 0.07, 'WDC': 0.07, 'SWKS': 0.07, 'WAT': 0.07, 'SPY': 0.019999999999999907}
-2026-05-06 16:16:47,912 INFO Rebalance complete (portfolio_value=210784.93)
-2026-05-06 16:16:47,913 INFO State saved
+2026-05-07 16:21:22,039 INFO === PEAD daily run: 2026-05-07 ===
+2026-05-07 16:21:22,039 INFO Pre-flight connectivity check:
+2026-05-07 16:21:22,074 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-05-07 16:21:22,182 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-05-07 16:21:22,183 INFO Loaded 14 open trades
+2026-05-07 16:21:30,356 INFO Prefetching earnings data for 193 symbols...
+2026-05-07 16:23:52,390 INFO Earnings prefetch: 192/193 symbols returned data (99% success rate)
+2026-05-07 16:23:54,602 INFO SIGNAL CVS  eps_beat=16.3%  trigger=d0  stop=78.30
+2026-05-07 16:23:54,743 INFO SIGNAL DVA  eps_beat=23.2%  trigger=d1  stop=174.89
+2026-05-07 16:23:58,428 INFO SIGNAL SMCI  eps_beat=35.5%  trigger=d1  stop=30.63
+2026-05-07 16:23:58,601 INFO Active positions: ['NTRS', 'TXN', 'WST', 'FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'SMCI']
+2026-05-07 16:23:58,601 INFO Target weights:   {'NTRS': 0.058823529411764705, 'TXN': 0.058823529411764705, 'WST': 0.058823529411764705, 'FFIV': 0.058823529411764705, 'STX': 0.058823529411764705, 'BAX': 0.058823529411764705, 'BMY': 0.058823529411764705, 'LLY': 0.058823529411764705, 'AIG': 0.058823529411764705, 'DXCM': 0.058823529411764705, 'FSLR': 0.058823529411764705, 'WDC': 0.058823529411764705, 'SWKS': 0.058823529411764705, 'WAT': 0.058823529411764705, 'CVS': 0.058823529411764705, 'DVA': 0.058823529411764705, 'SMCI': 0.058823529411764705}
+2026-05-07 16:23:59,006 INFO Rebalance complete (portfolio_value=209767.17)
+2026-05-07 16:23:59,008 INFO State saved
+2026-05-07 16:23:59,123 INFO Run report written to run_report.md
