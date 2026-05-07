@@ -38,7 +38,8 @@ def compute_features(prices_df):
 
 
 _SIGNALS_COLS = ['symbol', 'earnings_date', 'entry_date', 'entry_open',
-                 'eps_beat_pct', 'trigger_day', 'stop_price']
+                 'eps_beat_pct', 'trigger_day', 'stop_price',
+                 'price_ret_pct', 'vol_mult']
 
 
 def _empty_signals():
@@ -96,9 +97,11 @@ def build_signals(events_df, prices_df):
     )
     if d0_mask.any():
         d0 = merged[d0_mask].copy()
-        d0['trigger_day'] = 'd0'
-        d0['entry_date']  = d0['d1_date']   # Enter on D+1 open
-        d0['entry_open']  = d0['d1_open']
+        d0['trigger_day']   = 'd0'
+        d0['entry_date']    = d0['d1_date']   # Enter on D+1 open
+        d0['entry_open']    = d0['d1_open']
+        d0['price_ret_pct'] = (d0['day0_ret'] * 100).round(1)
+        d0['vol_mult']      = (d0['volume'] / d0['avg20_vol']).round(1)
         parts.append(d0)
 
     # --- D1 trigger (only for rows NOT already captured by D0) ---
@@ -111,9 +114,11 @@ def build_signals(events_df, prices_df):
     )
     if d1_mask.any():
         d1 = merged[d1_mask].copy()
-        d1['trigger_day'] = 'd1'
-        d1['entry_date']  = d1['d2_date']   # Enter on D+2 open
-        d1['entry_open']  = d1['d2_open']
+        d1['trigger_day']   = 'd1'
+        d1['entry_date']    = d1['d2_date']   # Enter on D+2 open
+        d1['entry_open']    = d1['d2_open']
+        d1['price_ret_pct'] = ((d1['d1_close'] - d1['prior_close']) / d1['prior_close'] * 100).round(1)
+        d1['vol_mult']      = (d1['d1_volume'] / d1['avg20_vol']).round(1)
         parts.append(d1)
 
     if not parts:

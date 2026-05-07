@@ -45,14 +45,17 @@ _LOOKBACK_DAYS       = 90   # Days of price history to fetch for signal computat
 _STOP_PRICE_LOOKBACK = 45   # Days of price history to fetch for stop loss check
 
 
-def _append_log(row_date, symbol, action, price, eps_beat, reason=''):
+def _append_log(row_date, symbol, action, price, eps_beat, reason='',
+                price_ret_pct='', vol_mult=''):
     path      = Path(LOG_FILE)
     write_hdr = not path.exists()
     with open(path, 'a', newline='') as f:
         writer = csv.writer(f)
         if write_hdr:
-            writer.writerow(['date', 'symbol', 'action', 'price', 'eps_beat_pct', 'reason'])
-        writer.writerow([row_date, symbol, action, price, eps_beat, reason])
+            writer.writerow(['date', 'symbol', 'action', 'price', 'eps_beat_pct',
+                             'price_ret_pct', 'vol_mult', 'reason'])
+        writer.writerow([row_date, symbol, action, price, eps_beat,
+                         price_ret_pct, vol_mult, reason])
 
 
 def _fetch_prices_for_positions(symbols, today):
@@ -158,13 +161,15 @@ def _write_run_report(
 
     lines.append("## New Entries This Run")
     if new_trades:
-        lines.append("| Symbol | EPS Beat % | Entry Price | Stop Price | Earnings Date |")
-        lines.append("|--------|-----------|-------------|------------|---------------|")
+        lines.append("| Symbol | EPS Beat % | Price Ret % | Vol Mult | Entry Price | Stop Price | Earnings Date |")
+        lines.append("|--------|-----------|-------------|----------|-------------|------------|---------------|")
         for t in new_trades:
-            ep  = f"${float(t['entry_price']):,.2f}" if t.get('entry_price') else 'n/a'
-            sp  = f"${float(t['stop_price']):,.2f}"  if t.get('stop_price')  else 'n/a'
-            eps = f"{float(t['eps_beat_pct']):.1f}%" if t.get('eps_beat_pct') else 'n/a'
-            lines.append(f"| {t['symbol']} | {eps} | {ep} | {sp} | {t.get('earnings_date','n/a')} |")
+            ep   = f"${float(t['entry_price']):,.2f}" if t.get('entry_price') else 'n/a'
+            sp   = f"${float(t['stop_price']):,.2f}"  if t.get('stop_price')  else 'n/a'
+            eps  = f"{float(t['eps_beat_pct']):.1f}%" if t.get('eps_beat_pct') else 'n/a'
+            pret = f"{float(t['price_ret_pct']):.1f}%" if t.get('price_ret_pct') != '' else 'n/a'
+            vmul = f"{float(t['vol_mult']):.1f}x"      if t.get('vol_mult') != ''      else 'n/a'
+            lines.append(f"| {t['symbol']} | {eps} | {pret} | {vmul} | {ep} | {sp} | {t.get('earnings_date','n/a')} |")
     else:
         lines.append("_No new entries this run._")
     lines.append("")
@@ -407,12 +412,16 @@ def run():
                         'stop_price':    row['stop_price'],
                         'eps_beat_pct':  row['eps_beat_pct'],
                         'earnings_date': str(scan_date),
+                        'price_ret_pct': row['price_ret_pct'],
+                        'vol_mult':      row['vol_mult'],
                     }
                     new_trades.append(new_trade)
                     already_open.add(sym)  # prevent double-entry across scan windows
                     log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
+                             f"price_ret={row['price_ret_pct']:.1f}%  vol={row['vol_mult']:.1f}x  "
                              f"trigger={row['trigger_day']}  stop={row['stop_price']:.2f}")
-                    _append_log(today, sym, 'ENTRY', row['entry_open'], row['eps_beat_pct'])
+                    _append_log(today, sym, 'ENTRY', row['entry_open'], row['eps_beat_pct'],
+                                price_ret_pct=row['price_ret_pct'], vol_mult=row['vol_mult'])
 
         except Exception as exc:
             log.warning(f"Error processing {sym}: {exc}")
@@ -448,16 +457,16 @@ def run():
         save_state(trades_df)
         log.info("State saved")
         _write_run_report(
-            today           = today,
-            is_live         = is_live,
-            yahoo_ok        = yahoo_ok,
-            alpaca_ok       = alpaca_ok,
-            exited          = exited,
-            new_trades      = new_trades,
-            rebalance_orders= rebalance_orders,
-            trades_df       = trades_df,
-            target_weights  = target_weights,
-            portfolio_value = portfolio_value,
+            today            = today,
+            is_live          = is_live,
+            yahoo_ok         = yahoo_ok,
+            alpaca_ok        = alpaca_ok,
+            exited           = exited,
+            new_trades       = new_trades,
+            rebalance_orders = rebalance_orders,
+            trades_df        = trades_df,
+            target_weights   = target_weights,
+            portfolio_value  = portfolio_value,
         )
         _push_state()
 
