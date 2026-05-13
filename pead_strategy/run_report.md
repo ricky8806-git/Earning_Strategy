@@ -1,6 +1,7 @@
 # PEAD Strategy Run Report
 **Date:** 2026-05-13  
-**Status:** DRY-RUN (broker unreachable)  
+**Status:** LIVE  
+**Portfolio value:** $216,701.73  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
@@ -10,10 +11,19 @@
 _No exits this run._
 
 ## New Entries This Run
-_No new entries this run._
+| Symbol | EPS Beat % | Price Ret % | Vol Mult | Entry Price | Stop Price | Earnings Date |
+|--------|-----------|-------------|----------|-------------|------------|---------------|
+| Q | 17.4% | 9.9% | 2.6x | $170.72 | $153.65 | 2026-05-12 |
+| ZBRA | 11.8% | 11.4% | 3.6x | $247.84 | $223.06 | 2026-05-12 |
 
 ## Rebalance Orders
-_Dry-run — no orders placed._
+| Symbol | Action | Notional |
+|--------|--------|----------|
+| NTRS | REBALANCE_SELL | $5,039.82 |
+| AIG | REBALANCE_SELL | $4,864.37 |
+| CVS | REBALANCE_SELL | $4,737.49 |
+| Q | REBALANCE_BUY | $9,029.24 |
+| ZBRA | REBALANCE_BUY | $9,029.24 |
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
@@ -40,29 +50,33 @@ _Dry-run — no orders placed._
 | PTC | 2026-05-08 | $146.33 | $131.70 | 27.5% | 3 |
 | VTRS | 2026-05-08 | $17.30 | $15.57 | 18.0% | 3 |
 | XYZ | 2026-05-11 | $75.09 | $67.58 | 25.0% | 2 |
+| Q | 2026-05-13 | $170.72 | $153.65 | 17.4% | 0 |
+| ZBRA | 2026-05-13 | $247.84 | $223.06 | 11.8% | 0 |
 
 ## Target Weights
 | Symbol | Weight |
 |--------|--------|
-| NTRS | 4.5% |
-| TXN | 4.5% |
-| WST | 4.5% |
-| FFIV | 4.5% |
-| STX | 4.5% |
-| BAX | 4.5% |
-| BMY | 4.5% |
-| LLY | 4.5% |
-| AIG | 4.5% |
-| DXCM | 4.5% |
-| FSLR | 4.5% |
-| WDC | 4.5% |
-| SWKS | 4.5% |
-| WAT | 4.5% |
-| CVS | 4.5% |
-| DVA | 4.5% |
-| SMCI | 4.5% |
-| DDOG | 4.5% |
-| FTNT | 4.5% |
-| PTC | 4.5% |
-| VTRS | 4.5% |
-| XYZ | 4.5% |
+| NTRS | 4.2% |
+| TXN | 4.2% |
+| WST | 4.2% |
+| FFIV | 4.2% |
+| STX | 4.2% |
+| BAX | 4.2% |
+| BMY | 4.2% |
+| LLY | 4.2% |
+| AIG | 4.2% |
+| DXCM | 4.2% |
+| FSLR | 4.2% |
+| WDC | 4.2% |
+| SWKS | 4.2% |
+| WAT | 4.2% |
+| CVS | 4.2% |
+| DVA | 4.2% |
+| SMCI | 4.2% |
+| DDOG | 4.2% |
+| FTNT | 4.2% |
+| PTC | 4.2% |
+| VTRS | 4.2% |
+| XYZ | 4.2% |
+| Q | 4.2% |
+| ZBRA | 4.2% |
