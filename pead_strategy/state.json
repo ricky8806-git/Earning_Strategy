@@ -6,9 +6,7 @@
       "entry_price": 171.74000549316406,
       "stop_price": 154.56600494384767,
       "eps_beat_pct": 16.309012875536474,
-      "earnings_date": "2026-04-21",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-21"
     },
     {
       "symbol": "TXN",
@@ -16,9 +14,7 @@
       "entry_price": 287.8299865722656,
       "stop_price": 259.0469879150391,
       "eps_beat_pct": 23.52941176470587,
-      "earnings_date": "2026-04-22",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-22"
     },
     {
       "symbol": "WST",
@@ -26,9 +22,7 @@
       "entry_price": 316.0,
       "stop_price": 284.40000000000003,
       "eps_beat_pct": 26.785714285714285,
-      "earnings_date": "2026-04-23",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-23"
     },
     {
       "symbol": "FFIV",
@@ -36,9 +30,7 @@
       "entry_price": 327.5400085449219,
       "stop_price": 294.7860076904297,
       "eps_beat_pct": 12.716763005780345,
-      "earnings_date": "2026-04-28",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-28"
     },
     {
       "symbol": "STX",
@@ -46,9 +38,7 @@
       "entry_price": 654.614990234375,
       "stop_price": 589.1534912109375,
       "eps_beat_pct": 16.477272727272716,
-      "earnings_date": "2026-04-28",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-28"
     },
     {
       "symbol": "BAX",
@@ -56,9 +46,7 @@
       "entry_price": 17.84000015258789,
       "stop_price": 16.056000137329104,
       "eps_beat_pct": 16.129032258064512,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "BMY",
@@ -66,9 +54,7 @@
       "entry_price": 60.02000045776367,
       "stop_price": 54.01800041198731,
       "eps_beat_pct": 11.267605633802827,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "LLY",
@@ -76,9 +62,7 @@
       "entry_price": 948.9500122070312,
       "stop_price": 854.0550109863282,
       "eps_beat_pct": 25.92047128129603,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "AIG",
@@ -86,9 +70,7 @@
       "entry_price": 78.0,
       "stop_price": 70.2,
       "eps_beat_pct": 12.23404255319149,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "DXCM",
@@ -96,9 +78,7 @@
       "entry_price": 61.61000061035156,
       "stop_price": 55.44900054931641,
       "eps_beat_pct": 19.148936170212785,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "FSLR",
@@ -106,9 +86,7 @@
       "entry_price": 212.0,
       "stop_price": 190.8,
       "eps_beat_pct": 13.780918727915198,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "WDC",
@@ -116,9 +94,7 @@
       "entry_price": 430.7300109863281,
       "stop_price": 387.6570098876953,
       "eps_beat_pct": 283.17757009345786,
-      "earnings_date": "2026-04-30",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-04-30"
     },
     {
       "symbol": "SWKS",
@@ -126,9 +102,7 @@
       "entry_price": 68.0,
       "stop_price": 61.2,
       "eps_beat_pct": 10.576923076923064,
-      "earnings_date": "2026-05-05",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-05"
     },
     {
       "symbol": "WAT",
@@ -136,9 +110,7 @@
       "entry_price": 344.0,
       "stop_price": 309.6,
       "eps_beat_pct": 16.883116883116887,
-      "earnings_date": "2026-05-05",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-05"
     },
     {
       "symbol": "CVS",
@@ -146,9 +118,7 @@
       "entry_price": 87.0,
       "stop_price": 78.3,
       "eps_beat_pct": 16.28959276018099,
-      "earnings_date": "2026-05-06",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-06"
     },
     {
       "symbol": "DVA",
@@ -156,9 +126,7 @@
       "entry_price": 194.32000732421875,
       "stop_price": 174.88800659179688,
       "eps_beat_pct": 23.175965665236053,
-      "earnings_date": "2026-05-05",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-05"
     },
     {
       "symbol": "SMCI",
@@ -166,9 +134,7 @@
       "entry_price": 34.029998779296875,
       "stop_price": 30.626998901367188,
       "eps_beat_pct": 35.48387096774193,
-      "earnings_date": "2026-05-05",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-05"
     },
     {
       "symbol": "DDOG",
@@ -176,9 +142,7 @@
       "entry_price": 185.5,
       "stop_price": 166.95000000000002,
       "eps_beat_pct": 114.28571428571426,
-      "earnings_date": "2026-05-07",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-07"
     },
     {
       "symbol": "FTNT",
@@ -186,9 +150,7 @@
       "entry_price": 106.66999816894531,
       "stop_price": 96.00299835205078,
       "eps_beat_pct": 32.258064516129025,
-      "earnings_date": "2026-05-06",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-06"
     },
     {
       "symbol": "PTC",
@@ -196,9 +158,7 @@
       "entry_price": 146.3300018310547,
       "stop_price": 131.69700164794924,
       "eps_beat_pct": 27.48815165876778,
-      "earnings_date": "2026-05-06",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-06"
     },
     {
       "symbol": "VTRS",
@@ -206,9 +166,7 @@
       "entry_price": 17.299999237060547,
       "stop_price": 15.569999313354492,
       "eps_beat_pct": 17.999999999999993,
-      "earnings_date": "2026-05-07",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-07"
     },
     {
       "symbol": "XYZ",
@@ -216,9 +174,7 @@
       "entry_price": 75.08999633789062,
       "stop_price": 67.58099670410157,
       "eps_beat_pct": 24.99999999999999,
-      "earnings_date": "2026-05-07",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-05-07"
     },
     {
       "symbol": "Q",
@@ -226,9 +182,7 @@
       "entry_price": 170.72000122070312,
       "stop_price": 153.64800109863282,
       "eps_beat_pct": 17.39130434782609,
-      "earnings_date": "2026-05-12",
-      "price_ret_pct": 9.9,
-      "vol_mult": 2.6
+      "earnings_date": "2026-05-12"
     },
     {
       "symbol": "ZBRA",
@@ -236,9 +190,7 @@
       "entry_price": 247.83999633789062,
       "stop_price": 223.05599670410157,
       "eps_beat_pct": 11.76470588235294,
-      "earnings_date": "2026-05-12",
-      "price_ret_pct": 11.4,
-      "vol_mult": 3.6
+      "earnings_date": "2026-05-12"
     }
   ]
 }
