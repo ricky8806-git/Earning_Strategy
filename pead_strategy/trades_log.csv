@@ -754,3 +754,6 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-13,ZBRA,REBALANCE_BUY,9029.23875,,,,
 2026-05-14,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-14,CSCO,SCAN_MISS,,1.06,,,eps_low:1.9%
+2026-05-15,AMAT,SCAN_MISS,,2.86,,,eps_low:6.7%
+2026-05-15,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-15,CSCO,SCAN_MISS,,1.06,,,eps_low:1.9%
