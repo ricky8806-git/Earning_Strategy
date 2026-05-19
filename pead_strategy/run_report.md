@@ -1,19 +1,22 @@
 # PEAD Strategy Run Report
 **Date:** 2026-05-19  
-**Status:** DRY-RUN (broker unreachable)  
+**Status:** LIVE  
+**Portfolio value:** $216,800.93  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
 - Alpaca paper API: BLOCKED (HTTP 403 — IP not allowlisted)  
 
 ## Exits This Run
-_No exits this run._
+| Symbol | Reason | Entry Date | Entry Price | Stop Price |
+|--------|--------|------------|-------------|------------|
+| Q | stop_loss | n/a | n/a | n/a |
 
 ## New Entries This Run
 _No new entries this run._
 
 ## Rebalance Orders
-_Dry-run — no orders placed._
+_No orders placed (all positions within tolerance band)._
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
@@ -40,33 +43,31 @@ _Dry-run — no orders placed._
 | PTC | 2026-05-08 | $146.33 | $131.70 | 27.5% | 7 |
 | VTRS | 2026-05-08 | $17.30 | $15.57 | 18.0% | 7 |
 | XYZ | 2026-05-11 | $75.09 | $67.58 | 25.0% | 6 |
-| Q | 2026-05-13 | $170.72 | $153.65 | 17.4% | 4 |
 | ZBRA | 2026-05-13 | $247.84 | $223.06 | 11.8% | 4 |
 
 ## Target Weights
 | Symbol | Weight |
 |--------|--------|
-| NTRS | 4.2% |
-| TXN | 4.2% |
-| WST | 4.2% |
-| FFIV | 4.2% |
-| STX | 4.2% |
-| BAX | 4.2% |
-| BMY | 4.2% |
-| LLY | 4.2% |
-| AIG | 4.2% |
-| DXCM | 4.2% |
-| FSLR | 4.2% |
-| WDC | 4.2% |
-| SWKS | 4.2% |
-| WAT | 4.2% |
-| CVS | 4.2% |
-| DVA | 4.2% |
-| SMCI | 4.2% |
-| DDOG | 4.2% |
-| FTNT | 4.2% |
-| PTC | 4.2% |
-| VTRS | 4.2% |
-| XYZ | 4.2% |
-| Q | 4.2% |
-| ZBRA | 4.2% |
+| NTRS | 4.3% |
+| TXN | 4.3% |
+| WST | 4.3% |
+| FFIV | 4.3% |
+| STX | 4.3% |
+| BAX | 4.3% |
+| BMY | 4.3% |
+| LLY | 4.3% |
+| AIG | 4.3% |
+| DXCM | 4.3% |
+| FSLR | 4.3% |
+| WDC | 4.3% |
+| SWKS | 4.3% |
+| WAT | 4.3% |
+| CVS | 4.3% |
+| DVA | 4.3% |
+| SMCI | 4.3% |
+| DDOG | 4.3% |
+| FTNT | 4.3% |
+| PTC | 4.3% |
+| VTRS | 4.3% |
+| XYZ | 4.3% |
+| ZBRA | 4.3% |
