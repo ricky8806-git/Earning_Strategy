@@ -121,14 +121,6 @@
       "earnings_date": "2026-05-05"
     },
     {
-      "symbol": "SMCI",
-      "entry_date": "2026-05-07",
-      "entry_price": 34.029998779296875,
-      "stop_price": 30.626998901367188,
-      "eps_beat_pct": 35.48387096774193,
-      "earnings_date": "2026-05-05"
-    },
-    {
       "symbol": "DDOG",
       "entry_date": "2026-05-08",
       "entry_price": 185.5,

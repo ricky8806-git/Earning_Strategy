@@ -762,3 +762,8 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-19,Q,EXIT_STOP,,,,,stop_loss
 2026-05-19,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-20,NTRS,EXIT_TIME,,,,,time
+2026-05-20,SMCI,EXIT_STOP,,,,,stop_loss
+2026-05-20,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-20,IBM,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-20,KEYS,SCAN_MISS,,2.02,,,price_low:1.1%
+2026-05-20,NTRS,REBALANCE_CLOSE,9215.750458,,,,
