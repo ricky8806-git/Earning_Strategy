@@ -761,3 +761,4 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-18,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-19,Q,EXIT_STOP,,,,,stop_loss
 2026-05-19,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-20,NTRS,EXIT_TIME,,,,,time
