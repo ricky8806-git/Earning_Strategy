@@ -1,6 +1,7 @@
 # PEAD Strategy Run Report
 **Date:** 2026-05-21  
-**Status:** DRY-RUN (broker unreachable)  
+**Status:** LIVE  
+**Portfolio value:** $221,596.28  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
@@ -13,7 +14,7 @@ _No exits this run._
 _No new entries this run._
 
 ## Rebalance Orders
-_Dry-run — no orders placed._
+_No orders placed (all positions within tolerance band)._
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |

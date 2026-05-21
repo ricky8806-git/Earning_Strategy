@@ -767,3 +767,8 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-20,IBM,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-20,KEYS,SCAN_MISS,,2.02,,,price_low:1.1%
 2026-05-20,NTRS,REBALANCE_CLOSE,9215.750458,,,,
+2026-05-21,ADI,SCAN_MISS,,3.09,,,eps_low:6.2%
+2026-05-21,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-21,INTU,SCAN_MISS,,12.8,,,eps_low:1.8%
+2026-05-21,KEYS,SCAN_MISS,,2.02,,,price_low:0.5%
+2026-05-21,NVDA,SCAN_MISS,,1.87,,,eps_low:5.6%
