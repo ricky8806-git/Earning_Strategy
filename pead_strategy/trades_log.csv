@@ -772,3 +772,5 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-21,INTU,SCAN_MISS,,12.8,,,eps_low:1.8%
 2026-05-21,KEYS,SCAN_MISS,,2.02,,,price_low:0.5%
 2026-05-21,NVDA,SCAN_MISS,,1.87,,,eps_low:5.6%
+2026-05-22,TXN,EXIT_TIME,,,,,time
+2026-05-22,WST,EXIT_TIME,,,,,time

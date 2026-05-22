@@ -1,22 +1,6 @@
 {
   "open_trades": [
     {
-      "symbol": "TXN",
-      "entry_date": "2026-04-24",
-      "entry_price": 287.8299865722656,
-      "stop_price": 259.0469879150391,
-      "eps_beat_pct": 23.52941176470587,
-      "earnings_date": "2026-04-22"
-    },
-    {
-      "symbol": "WST",
-      "entry_date": "2026-04-24",
-      "entry_price": 316.0,
-      "stop_price": 284.40000000000003,
-      "eps_beat_pct": 26.785714285714285,
-      "earnings_date": "2026-04-23"
-    },
-    {
       "symbol": "FFIV",
       "entry_date": "2026-04-30",
       "entry_price": 327.5400085449219,
