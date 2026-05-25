@@ -1,12 +1,33 @@
-2026-05-22 16:40:32,432 INFO === PEAD daily run: 2026-05-22 ===
-2026-05-22 16:40:32,432 INFO Pre-flight connectivity check:
-2026-05-22 16:40:32,594 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-05-22 16:40:32,789 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-05-22 16:40:32,791 INFO Loaded 19 open trades
-2026-05-22 16:40:38,520 INFO Prefetching earnings data for 189 symbols...
-2026-05-22 16:43:15,274 INFO Earnings prefetch: 188/189 symbols returned data (99% success rate)
-2026-05-22 16:43:16,360 INFO Active positions: ['FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA']
-2026-05-22 16:43:16,360 INFO Target weights:   {'FFIV': 0.05263157894736842, 'STX': 0.05263157894736842, 'BAX': 0.05263157894736842, 'BMY': 0.05263157894736842, 'LLY': 0.05263157894736842, 'AIG': 0.05263157894736842, 'DXCM': 0.05263157894736842, 'FSLR': 0.05263157894736842, 'WDC': 0.05263157894736842, 'SWKS': 0.05263157894736842, 'WAT': 0.05263157894736842, 'CVS': 0.05263157894736842, 'DVA': 0.05263157894736842, 'DDOG': 0.05263157894736842, 'FTNT': 0.05263157894736842, 'PTC': 0.05263157894736842, 'VTRS': 0.05263157894736842, 'XYZ': 0.05263157894736842, 'ZBRA': 0.05263157894736842}
-2026-05-22 16:43:16,978 INFO Rebalance complete (portfolio_value=227094.54)
-2026-05-22 16:43:16,980 INFO State saved
-2026-05-22 16:43:17,080 INFO Run report written to run_report.md
+2026-05-25 16:37:50,378 INFO === PEAD daily run: 2026-05-25 ===
+2026-05-25 16:37:50,378 INFO Pre-flight connectivity check:
+2026-05-25 16:37:50,541 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-05-25 16:37:50,689 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-05-25 16:37:50,691 INFO Loaded 19 open trades
+2026-05-25 16:37:51,105 WARNING Could not fetch prices for FFIV: 'date'
+2026-05-25 16:37:51,472 WARNING Could not fetch prices for STX: 'date'
+2026-05-25 16:37:51,789 WARNING Could not fetch prices for BAX: 'date'
+2026-05-25 16:37:52,176 WARNING Could not fetch prices for BMY: 'date'
+2026-05-25 16:37:52,435 WARNING Could not fetch prices for LLY: 'date'
+2026-05-25 16:37:52,817 WARNING Could not fetch prices for AIG: 'date'
+2026-05-25 16:37:53,036 WARNING Could not fetch prices for DXCM: 'date'
+2026-05-25 16:37:53,211 WARNING Could not fetch prices for FSLR: 'date'
+2026-05-25 16:37:53,491 WARNING Could not fetch prices for WDC: 'date'
+2026-05-25 16:37:53,688 WARNING Could not fetch prices for SWKS: 'date'
+2026-05-25 16:37:53,945 WARNING Could not fetch prices for WAT: 'date'
+2026-05-25 16:37:54,210 WARNING Could not fetch prices for CVS: 'date'
+2026-05-25 16:37:54,382 WARNING Could not fetch prices for DVA: 'date'
+2026-05-25 16:37:54,598 WARNING Could not fetch prices for DDOG: 'date'
+2026-05-25 16:37:54,719 WARNING Could not fetch prices for FTNT: 'date'
+2026-05-25 16:37:54,884 WARNING Could not fetch prices for PTC: 'date'
+2026-05-25 16:37:55,195 WARNING Could not fetch prices for VTRS: 'date'
+2026-05-25 16:37:55,411 WARNING Could not fetch prices for XYZ: 'date'
+2026-05-25 16:37:55,678 WARNING Could not fetch prices for ZBRA: 'date'
+2026-05-25 16:37:55,678 WARNING Price data unavailable for 19/19 positions — stop-loss check is degraded (positions will not be force-exited): ['FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA']
+2026-05-25 16:37:56,117 INFO Prefetching earnings data for 189 symbols...
+2026-05-25 16:40:12,897 INFO Earnings prefetch: 188/189 symbols returned data (99% success rate)
+2026-05-25 16:40:13,285 WARNING Error processing WDAY: 'date'
+2026-05-25 16:40:13,288 INFO Active positions: ['FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA']
+2026-05-25 16:40:13,288 INFO Target weights:   {'FFIV': 0.05263157894736842, 'STX': 0.05263157894736842, 'BAX': 0.05263157894736842, 'BMY': 0.05263157894736842, 'LLY': 0.05263157894736842, 'AIG': 0.05263157894736842, 'DXCM': 0.05263157894736842, 'FSLR': 0.05263157894736842, 'WDC': 0.05263157894736842, 'SWKS': 0.05263157894736842, 'WAT': 0.05263157894736842, 'CVS': 0.05263157894736842, 'DVA': 0.05263157894736842, 'DDOG': 0.05263157894736842, 'FTNT': 0.05263157894736842, 'PTC': 0.05263157894736842, 'VTRS': 0.05263157894736842, 'XYZ': 0.05263157894736842, 'ZBRA': 0.05263157894736842}
+2026-05-25 16:40:14,050 INFO Rebalance complete (portfolio_value=227406.28)
+2026-05-25 16:40:14,051 INFO State saved
+2026-05-25 16:40:14,149 INFO Run report written to run_report.md
