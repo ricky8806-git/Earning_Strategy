@@ -785,3 +785,15 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-26,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-27,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-28,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-29,FFIV,EXIT_TIME,,,,,time
+2026-05-29,STX,EXIT_TIME,,,,,time
+2026-05-29,A,SCAN_MISS,,1.49,,,eps_low:5.7%
+2026-05-29,ADSK,SCAN_MISS,,2.99,,,eps_low:5.3%
+2026-05-29,BRK.B,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-29,DELL,ENTRY,418.0,64.1891891891892,3.8,3.5,
+2026-05-29,HPQ,SCAN_MISS,,0.86,,,price_low:2.4%
+2026-05-29,NTAP,SCAN_MISS,,2.43,,,eps_low:7.0%
+2026-05-29,CRM,SCAN_MISS,,3.88,,,price_low:-1.6%+vol_low:1.9x
+2026-05-29,SNPS,SCAN_MISS,,0.09,,,eps_low:-72.7%
+2026-05-29,TER,SKIP_NO_DATA,,,,,no_earnings_data
+2026-05-29,DELL,REBALANCE_BUY,12872.938333333334,,,,
