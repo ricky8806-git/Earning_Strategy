@@ -1,36 +1,16 @@
-2026-05-28 17:48:27,941 INFO === PEAD daily run: 2026-05-28 ===
-2026-05-28 17:48:27,941 INFO Pre-flight connectivity check:
-2026-05-28 17:48:27,976 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-05-28 17:48:28,066 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-05-28 17:48:28,067 INFO Loaded 19 open trades
-2026-05-28 17:48:28,368 WARNING Could not fetch prices for FFIV: 'date'
-2026-05-28 17:48:28,589 WARNING Could not fetch prices for STX: 'date'
-2026-05-28 17:48:28,785 WARNING Could not fetch prices for BAX: 'date'
-2026-05-28 17:48:29,074 WARNING Could not fetch prices for BMY: 'date'
-2026-05-28 17:48:29,353 WARNING Could not fetch prices for LLY: 'date'
-2026-05-28 17:48:29,575 WARNING Could not fetch prices for AIG: 'date'
-2026-05-28 17:48:29,671 WARNING Could not fetch prices for DXCM: 'date'
-2026-05-28 17:48:29,859 WARNING Could not fetch prices for FSLR: 'date'
-2026-05-28 17:48:29,988 WARNING Could not fetch prices for WDC: 'date'
-2026-05-28 17:48:30,263 WARNING Could not fetch prices for SWKS: 'date'
-2026-05-28 17:48:30,349 WARNING Could not fetch prices for WAT: 'date'
-2026-05-28 17:48:30,567 WARNING Could not fetch prices for CVS: 'date'
-2026-05-28 17:48:30,740 WARNING Could not fetch prices for DVA: 'date'
-2026-05-28 17:48:30,911 WARNING Could not fetch prices for DDOG: 'date'
-2026-05-28 17:48:31,031 WARNING Could not fetch prices for FTNT: 'date'
-2026-05-28 17:48:31,212 WARNING Could not fetch prices for PTC: 'date'
-2026-05-28 17:48:31,413 WARNING Could not fetch prices for VTRS: 'date'
-2026-05-28 17:48:31,604 WARNING Could not fetch prices for XYZ: 'date'
-2026-05-28 17:48:31,780 WARNING Could not fetch prices for ZBRA: 'date'
-2026-05-28 17:48:31,780 WARNING Price data unavailable for 19/19 positions — stop-loss check is degraded (positions will not be force-exited): ['FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA']
-2026-05-28 17:48:32,100 INFO Prefetching earnings data for 189 symbols...
-2026-05-28 17:51:01,632 INFO Earnings prefetch: 188/189 symbols returned data (99% success rate)
-2026-05-28 17:51:01,895 WARNING Error processing A: 'date'
-2026-05-28 17:51:02,311 WARNING Error processing HPQ: 'date'
-2026-05-28 17:51:02,507 WARNING Error processing CRM: 'date'
-2026-05-28 17:51:02,678 WARNING Error processing SNPS: 'date'
-2026-05-28 17:51:02,699 INFO Active positions: ['FFIV', 'STX', 'BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA']
-2026-05-28 17:51:02,700 INFO Target weights:   {'FFIV': 0.05263157894736842, 'STX': 0.05263157894736842, 'BAX': 0.05263157894736842, 'BMY': 0.05263157894736842, 'LLY': 0.05263157894736842, 'AIG': 0.05263157894736842, 'DXCM': 0.05263157894736842, 'FSLR': 0.05263157894736842, 'WDC': 0.05263157894736842, 'SWKS': 0.05263157894736842, 'WAT': 0.05263157894736842, 'CVS': 0.05263157894736842, 'DVA': 0.05263157894736842, 'DDOG': 0.05263157894736842, 'FTNT': 0.05263157894736842, 'PTC': 0.05263157894736842, 'VTRS': 0.05263157894736842, 'XYZ': 0.05263157894736842, 'ZBRA': 0.05263157894736842}
-2026-05-28 17:51:02,922 INFO Rebalance complete (portfolio_value=231175.73)
-2026-05-28 17:51:02,924 INFO State saved
-2026-05-28 17:51:03,013 INFO Run report written to run_report.md
+2026-05-29 17:48:45,237 INFO === PEAD daily run: 2026-05-29 ===
+2026-05-29 17:48:45,237 INFO Pre-flight connectivity check:
+2026-05-29 17:48:45,277 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-05-29 17:48:45,313 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-05-29 17:48:45,315 INFO Loaded 19 open trades
+2026-05-29 17:48:48,631 INFO EXIT FFIV reason=time
+2026-05-29 17:48:48,711 INFO EXIT STX reason=time
+2026-05-29 17:48:48,814 INFO Prefetching earnings data for 191 symbols...
+2026-05-29 17:52:42,535 WARNING get_earnings(TER) failed: ['Earnings Date']
+2026-05-29 17:53:10,424 INFO Earnings prefetch: 189/191 symbols returned data (99% success rate)
+2026-05-29 17:53:10,911 INFO SIGNAL DELL  eps_beat=64.2%  price_ret=3.8%  vol=3.5x  trigger=d0  stop=376.20
+2026-05-29 17:53:11,691 INFO Active positions: ['BAX', 'BMY', 'LLY', 'AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA', 'DELL']
+2026-05-29 17:53:11,692 INFO Target weights:   {'BAX': 0.05555555555555555, 'BMY': 0.05555555555555555, 'LLY': 0.05555555555555555, 'AIG': 0.05555555555555555, 'DXCM': 0.05555555555555555, 'FSLR': 0.05555555555555555, 'WDC': 0.05555555555555555, 'SWKS': 0.05555555555555555, 'WAT': 0.05555555555555555, 'CVS': 0.05555555555555555, 'DVA': 0.05555555555555555, 'DDOG': 0.05555555555555555, 'FTNT': 0.05555555555555555, 'PTC': 0.05555555555555555, 'VTRS': 0.05555555555555555, 'XYZ': 0.05555555555555555, 'ZBRA': 0.05555555555555555, 'DELL': 0.05555555555555555}
+2026-05-29 17:53:11,828 INFO Rebalance complete (portfolio_value=231712.89)
+2026-05-29 17:53:11,830 INFO State saved
+2026-05-29 17:53:11,922 INFO Run report written to run_report.md
