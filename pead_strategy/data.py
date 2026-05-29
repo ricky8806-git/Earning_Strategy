@@ -1,7 +1,7 @@
 # pead_strategy/data.py
 import pandas as pd
 import yfinance as yf
-from config import TARGET_SECTORS, SP500_URL
+from config import TARGET_SECTORS, SP500_URL, SYMBOLS_EXCLUDE
 
 
 def get_sp500_symbols(sectors=None):
@@ -9,7 +9,8 @@ def get_sp500_symbols(sectors=None):
     if sectors is None:
         sectors = TARGET_SECTORS
     df = pd.read_csv(SP500_URL)
-    return df[df['GICS Sector'].isin(sectors)]['Symbol'].tolist()
+    symbols = df[df['GICS Sector'].isin(sectors)]['Symbol'].tolist()
+    return [s for s in symbols if s not in SYMBOLS_EXCLUDE]
 
 
 _PRICES_EMPTY = pd.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'])

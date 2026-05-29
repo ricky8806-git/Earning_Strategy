@@ -16,7 +16,7 @@ VOLUME_MULT       = 2.0
 STOP_LOSS_PCT     = 0.10
 
 TARGET_SECTORS   = ["Information Technology", "Health Care", "Financials"]
-SYMBOLS_EXCLUDE  = {'BRK.B'}  # symbols with no yfinance earnings data
+SYMBOLS_EXCLUDE  = {'BRK.B', 'BNY'}  # BRK.B: no yfinance data; BNY: ticker changed from BK on 2026-05-21, yfinance not yet indexed
 SP500_URL      = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv"
 LOG_FILE       = "trades_log.csv"
 STATE_FILE     = "state.json"
