@@ -12,28 +12,45 @@ def get_sp500_symbols(sectors=None):
     return df[df['GICS Sector'].isin(sectors)]['Symbol'].tolist()
 
 
+_PRICES_EMPTY = pd.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'])
+
+
 def get_prices(symbol, start, end):
     """Fetch daily OHLCV. Returns DataFrame with columns: date, open, high, low, close, volume."""
     df = yf.download(symbol, start=start, end=end, auto_adjust=True, progress=False)
     if df.empty:
-        return pd.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'])
+        return _PRICES_EMPTY.copy()
 
-    # Flatten MultiIndex columns that yfinance may produce for single-ticker downloads
+    # Flatten MultiIndex columns (yfinance ≥ 0.2 / 1.x returns (Price, Ticker) MultiIndex).
+    # Take only the first level so ('Adj Close', 'AAPL') → 'adj close', etc.
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = [col[0].lower() for col in df.columns]
     else:
         df.columns = [c.lower() for c in df.columns]
 
+    # yfinance 1.x includes 'adj close' even with auto_adjust=True — drop it.
+    df = df.drop(columns=[c for c in df.columns if 'adj' in c], errors='ignore')
+
     df = df.reset_index()
-    # Normalise column names after reset_index (index becomes 'Date' or 'Datetime')
     df.columns = [c.lower() for c in df.columns]
 
-    # Rename 'datetime' to 'date' if needed
-    if 'datetime' in df.columns:
-        df = df.rename(columns={'datetime': 'date'})
+    # After reset_index the date index may surface as 'date', 'datetime', or 'index'
+    # (the last happens when the DatetimeIndex has name=None, which yfinance 1.x does).
+    for alias in ('datetime', 'index'):
+        if alias in df.columns and 'date' not in df.columns:
+            df = df.rename(columns={alias: 'date'})
+            break
 
-    df['date'] = pd.to_datetime(df['date']).dt.date
-    return df[['date', 'open', 'high', 'low', 'close', 'volume']].reset_index(drop=True)
+    if 'date' not in df.columns:
+        return _PRICES_EMPTY.copy()
+
+    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None).dt.date
+
+    required = ['date', 'open', 'high', 'low', 'close', 'volume']
+    if not all(c in df.columns for c in required):
+        return _PRICES_EMPTY.copy()
+
+    return df[required].reset_index(drop=True)
 
 
 def get_spy_prices(start, end):
