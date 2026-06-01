@@ -797,3 +797,6 @@ date,symbol,action,price,eps_beat_pct,reason
 2026-05-29,SNPS,SCAN_MISS,,0.09,,,eps_low:-72.7%
 2026-05-29,TER,SKIP_NO_DATA,,,,,no_earnings_data
 2026-05-29,DELL,REBALANCE_BUY,12872.938333333334,,,,
+2026-06-01,BAX,EXIT_TIME,,,,,time
+2026-06-01,BMY,EXIT_TIME,,,,,time
+2026-06-01,LLY,EXIT_TIME,,,,,time
