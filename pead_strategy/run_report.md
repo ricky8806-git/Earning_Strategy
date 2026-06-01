@@ -1,23 +1,31 @@
 # PEAD Strategy Run Report
 **Date:** 2026-06-01  
-**Status:** DRY-RUN (broker unreachable)  
+**Status:** LIVE  
+**Portfolio value:** $235,515.96  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
 - Alpaca paper API: BLOCKED (HTTP 403 — IP not allowlisted)  
 
 ## Exits This Run
-| Symbol | Reason | Entry Date | Entry Price | Stop Price |
-|--------|--------|------------|-------------|------------|
-| BAX | time | n/a | n/a | n/a |
-| BMY | time | n/a | n/a | n/a |
-| LLY | time | n/a | n/a | n/a |
+_No exits this run._
 
 ## New Entries This Run
 _No new entries this run._
 
 ## Rebalance Orders
-_Dry-run — no orders placed._
+| Symbol | Action | Notional |
+|--------|--------|----------|
+| BAX | REBALANCE_CLOSE | $10,431.34 |
+| BMY | REBALANCE_CLOSE | $9,384.51 |
+| LLY | REBALANCE_CLOSE | $10,944.65 |
+| AIG | REBALANCE_BUY | $6,895.02 |
+| WAT | REBALANCE_BUY | $4,848.99 |
+| CVS | REBALANCE_BUY | $7,202.94 |
+| PTC | REBALANCE_BUY | $5,476.10 |
+| VTRS | REBALANCE_BUY | $6,123.47 |
+| XYZ | REBALANCE_BUY | $5,482.64 |
+| ZBRA | REBALANCE_BUY | $6,572.38 |
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
