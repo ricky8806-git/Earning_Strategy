@@ -1,66 +1,60 @@
 # PEAD Strategy Run Report
-**Date:** 2026-06-01  
+**Date:** 2026-06-02  
 **Status:** LIVE  
-**Portfolio value:** $235,515.96  
+**Portfolio value:** $234,063.54  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
 - Alpaca paper API: BLOCKED (HTTP 403 — IP not allowlisted)  
 
 ## Exits This Run
-_No exits this run._
+| Symbol | Reason | Entry Date | Entry Price | Stop Price |
+|--------|--------|------------|-------------|------------|
+| AIG | time | n/a | n/a | n/a |
+| DXCM | time | n/a | n/a | n/a |
+| FSLR | time | n/a | n/a | n/a |
+| WDC | time | n/a | n/a | n/a |
 
 ## New Entries This Run
-_No new entries this run._
+| Symbol | EPS Beat % | Price Ret % | Vol Mult | Entry Price | Stop Price | Earnings Date |
+|--------|-----------|-------------|----------|-------------|------------|---------------|
+| HPE | 49.1% | 9.2% | 5.4x | $63.06 | $56.75 | 2026-06-01 |
 
 ## Rebalance Orders
 | Symbol | Action | Notional |
 |--------|--------|----------|
-| BAX | REBALANCE_CLOSE | $10,431.34 |
-| BMY | REBALANCE_CLOSE | $9,384.51 |
-| LLY | REBALANCE_CLOSE | $10,944.65 |
-| AIG | REBALANCE_BUY | $6,895.02 |
-| WAT | REBALANCE_BUY | $4,848.99 |
-| CVS | REBALANCE_BUY | $7,202.94 |
-| PTC | REBALANCE_BUY | $5,476.10 |
-| VTRS | REBALANCE_BUY | $6,123.47 |
-| XYZ | REBALANCE_BUY | $5,482.64 |
-| ZBRA | REBALANCE_BUY | $6,572.38 |
+| HPE | REBALANCE_BUY | $16,384.45 |
+| SPY | REBALANCE_BUY | $37,450.17 |
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
 |--------|------------|-------------|------------|-----------|-----------|
-| AIG | 2026-05-04 | $78.00 | $70.20 | 12.2% | 19 |
-| DXCM | 2026-05-04 | $61.61 | $55.45 | 19.1% | 19 |
-| FSLR | 2026-05-04 | $212.00 | $190.80 | 13.8% | 19 |
-| WDC | 2026-05-04 | $430.73 | $387.66 | 283.2% | 19 |
-| SWKS | 2026-05-06 | $68.00 | $61.20 | 10.6% | 17 |
-| WAT | 2026-05-06 | $344.00 | $309.60 | 16.9% | 17 |
-| CVS | 2026-05-07 | $87.00 | $78.30 | 16.3% | 16 |
-| DVA | 2026-05-07 | $194.32 | $174.89 | 23.2% | 16 |
-| DDOG | 2026-05-08 | $185.50 | $166.95 | 114.3% | 15 |
-| FTNT | 2026-05-08 | $106.67 | $96.00 | 32.3% | 15 |
-| PTC | 2026-05-08 | $146.33 | $131.70 | 27.5% | 15 |
-| VTRS | 2026-05-08 | $17.30 | $15.57 | 18.0% | 15 |
-| XYZ | 2026-05-11 | $75.09 | $67.58 | 25.0% | 14 |
-| ZBRA | 2026-05-13 | $247.84 | $223.06 | 11.8% | 12 |
-| DELL | 2026-05-29 | $418.00 | $376.20 | 64.2% | 1 |
+| SWKS | 2026-05-06 | $68.00 | $61.20 | 10.6% | 18 |
+| WAT | 2026-05-06 | $344.00 | $309.60 | 16.9% | 18 |
+| CVS | 2026-05-07 | $87.00 | $78.30 | 16.3% | 17 |
+| DVA | 2026-05-07 | $194.32 | $174.89 | 23.2% | 17 |
+| DDOG | 2026-05-08 | $185.50 | $166.95 | 114.3% | 16 |
+| FTNT | 2026-05-08 | $106.67 | $96.00 | 32.3% | 16 |
+| PTC | 2026-05-08 | $146.33 | $131.70 | 27.5% | 16 |
+| VTRS | 2026-05-08 | $17.30 | $15.57 | 18.0% | 16 |
+| XYZ | 2026-05-11 | $75.09 | $67.58 | 25.0% | 15 |
+| ZBRA | 2026-05-13 | $247.84 | $223.06 | 11.8% | 13 |
+| DELL | 2026-05-29 | $418.00 | $376.20 | 64.2% | 2 |
+| HPE | 2026-06-02 | $63.06 | $56.75 | 49.1% | 0 |
 
 ## Target Weights
 | Symbol | Weight |
 |--------|--------|
-| AIG | 6.7% |
-| DXCM | 6.7% |
-| FSLR | 6.7% |
-| WDC | 6.7% |
-| SWKS | 6.7% |
-| WAT | 6.7% |
-| CVS | 6.7% |
-| DVA | 6.7% |
-| DDOG | 6.7% |
-| FTNT | 6.7% |
-| PTC | 6.7% |
-| VTRS | 6.7% |
-| XYZ | 6.7% |
-| ZBRA | 6.7% |
-| DELL | 6.7% |
+| SPY | 16.0% |
+| SWKS | 7.0% |
+| WAT | 7.0% |
+| CVS | 7.0% |
+| DVA | 7.0% |
+| DDOG | 7.0% |
+| FTNT | 7.0% |
+| PTC | 7.0% |
+| VTRS | 7.0% |
+| XYZ | 7.0% |
+| ZBRA | 7.0% |
+| DELL | 7.0% |
+| HPE | 7.0% |
