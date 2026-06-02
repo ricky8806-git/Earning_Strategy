@@ -1,12 +1,17 @@
-2026-06-01 19:27:38,706 INFO === PEAD daily run: 2026-06-01 ===
-2026-06-01 19:27:38,706 INFO Pre-flight connectivity check:
-2026-06-01 19:27:38,747 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-06-01 19:27:38,856 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-06-01 19:27:38,858 INFO Loaded 15 open trades
-2026-06-01 19:27:42,515 INFO Prefetching earnings data for 191 symbols...
-2026-06-01 19:29:30,929 INFO Earnings prefetch: 191/191 symbols returned data (100% success rate)
-2026-06-01 19:29:31,621 INFO Active positions: ['AIG', 'DXCM', 'FSLR', 'WDC', 'SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA', 'DELL']
-2026-06-01 19:29:31,621 INFO Target weights:   {'AIG': 0.06666666666666667, 'DXCM': 0.06666666666666667, 'FSLR': 0.06666666666666667, 'WDC': 0.06666666666666667, 'SWKS': 0.06666666666666667, 'WAT': 0.06666666666666667, 'CVS': 0.06666666666666667, 'DVA': 0.06666666666666667, 'DDOG': 0.06666666666666667, 'FTNT': 0.06666666666666667, 'PTC': 0.06666666666666667, 'VTRS': 0.06666666666666667, 'XYZ': 0.06666666666666667, 'ZBRA': 0.06666666666666667, 'DELL': 0.06666666666666667}
-2026-06-01 19:29:32,207 INFO Rebalance complete (portfolio_value=235515.96)
-2026-06-01 19:29:32,209 INFO State saved
-2026-06-01 19:29:32,269 INFO Run report written to run_report.md
+2026-06-02 18:13:45,244 INFO === PEAD daily run: 2026-06-02 ===
+2026-06-02 18:13:45,245 INFO Pre-flight connectivity check:
+2026-06-02 18:13:45,285 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-06-02 18:13:45,324 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-06-02 18:13:45,325 INFO Loaded 15 open trades
+2026-06-02 18:13:47,932 INFO EXIT AIG reason=time
+2026-06-02 18:13:47,980 INFO EXIT DXCM reason=time
+2026-06-02 18:13:48,026 INFO EXIT FSLR reason=time
+2026-06-02 18:13:48,074 INFO EXIT WDC reason=time
+2026-06-02 18:13:48,177 INFO Prefetching earnings data for 195 symbols...
+2026-06-02 18:15:37,315 INFO Earnings prefetch: 195/195 symbols returned data (100% success rate)
+2026-06-02 18:15:37,512 INFO SIGNAL HPE  eps_beat=49.1%  price_ret=9.2%  vol=5.4x  trigger=d0  stop=56.75
+2026-06-02 18:15:37,589 INFO Active positions: ['SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA', 'DELL', 'HPE']
+2026-06-02 18:15:37,590 INFO Target weights:   {'SWKS': 0.07, 'WAT': 0.07, 'CVS': 0.07, 'DVA': 0.07, 'DDOG': 0.07, 'FTNT': 0.07, 'PTC': 0.07, 'VTRS': 0.07, 'XYZ': 0.07, 'ZBRA': 0.07, 'DELL': 0.07, 'HPE': 0.07, 'SPY': 0.15999999999999992}
+2026-06-02 18:15:37,734 INFO Rebalance complete (portfolio_value=234063.54)
+2026-06-02 18:15:37,736 INFO State saved
+2026-06-02 18:15:37,803 INFO Run report written to run_report.md
