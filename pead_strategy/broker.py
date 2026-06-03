@@ -51,6 +51,23 @@ def close_position(symbol, client=None):
         print(f"[broker] Warning: could not close {symbol}: {e}")
 
 
+def get_avg_entry_prices(client=None):
+    """Return {symbol: avg_entry_price} for all open Alpaca positions."""
+    if client is None:
+        client = _get_client()
+    return {p.symbol: float(p.avg_entry_price) for p in client.get_all_positions()}
+
+
+def get_position_pnl(symbol, client=None):
+    """Return (unrealized_pl_dollars, unrealized_pl_pct) or (None, None) if position not found."""
+    if client is None:
+        client = _get_client()
+    for p in client.get_all_positions():
+        if p.symbol == symbol:
+            return float(p.unrealized_pl), float(p.unrealized_plpc) * 100
+    return None, None
+
+
 def rebalance(target_weights, portfolio_value, client=None):
     """
     Bring the portfolio in line with target_weights.

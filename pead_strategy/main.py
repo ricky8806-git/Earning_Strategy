@@ -18,12 +18,13 @@ import csv
 import json
 import logging
 import subprocess
+import time
 from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
 
-from broker    import close_position, get_account, rebalance
+from broker    import close_position, get_account, get_avg_entry_prices, get_position_pnl, rebalance
 from data      import get_earnings, get_prices, get_sp500_symbols
 from portfolio import check_exits, get_active_positions, get_portfolio_weights
 from signals   import build_signals, get_miss_reason
@@ -46,16 +47,16 @@ _STOP_PRICE_LOOKBACK = 45   # Days of price history to fetch for stop loss check
 
 
 def _append_log(row_date, symbol, action, price, eps_beat, reason='',
-                price_ret_pct='', vol_mult=''):
+                price_ret_pct='', vol_mult='', pnl='', pct_return=''):
     path      = Path(LOG_FILE)
     write_hdr = not path.exists()
     with open(path, 'a', newline='') as f:
         writer = csv.writer(f)
         if write_hdr:
             writer.writerow(['date', 'symbol', 'action', 'price', 'eps_beat_pct',
-                             'price_ret_pct', 'vol_mult', 'reason'])
+                             'price_ret_pct', 'vol_mult', 'reason', 'pnl', 'pct_return'])
         writer.writerow([row_date, symbol, action, price, eps_beat,
-                         price_ret_pct, vol_mult, reason])
+                         price_ret_pct, vol_mult, reason, pnl, pct_return])
 
 
 def _fetch_prices_for_positions(symbols, today):
@@ -269,6 +270,25 @@ def _push_state():
             log.info("git push succeeded after rebase")
 
 
+def _migrate_log():
+    """Add pnl and pct_return columns to trades_log.csv if they are missing."""
+    path = Path(LOG_FILE)
+    if not path.exists():
+        return
+    with open(path, newline='') as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+    if not rows or 'pnl' in rows[0]:
+        return
+    rows[0] = rows[0] + ['pnl', 'pct_return']
+    for i in range(1, len(rows)):
+        rows[i] = rows[i] + ['', '']
+    with open(path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
+    log.info("Migrated trades_log.csv: added pnl and pct_return columns")
+
+
 def run():
     from portfolio import _NYSE
     today = date.today()
@@ -279,6 +299,7 @@ def run():
     )
     yesterday = sched.index[-1].date() if not sched.empty else today - timedelta(days=1)
     log.info(f"=== PEAD daily run: {today} ===")
+    _migrate_log()
     yahoo_ok, alpaca_ok = _connectivity_report()
 
     # 1. Load persisted state
@@ -307,13 +328,31 @@ def run():
         seen_exits.add(sym)
         exited.append(exit_info)
         log.info(f"EXIT {sym} reason={reason}")
+
+        # Capture P&L before closing — Alpaca's cost basis reflects actual fill price
+        exit_pnl, exit_pct = '', ''
+        try:
+            pnl_dollars, pnl_pct = get_position_pnl(sym)
+            if pnl_dollars is not None:
+                exit_pnl = round(pnl_dollars, 2)
+                exit_pct = f'{pnl_pct:.2f}%'
+        except Exception:
+            pass
+        # Fallback: compute from prices_dict close vs stored entry_price
+        if exit_pct == '':
+            trade_row = trades_df[trades_df['symbol'] == sym]
+            if not trade_row.empty and sym in prices_dict and not prices_dict[sym].empty:
+                entry_p    = float(trade_row.iloc[0]['entry_price'])
+                last_close = float(prices_dict[sym]['close'].iloc[-1])
+                exit_pct   = f'{(last_close / entry_p - 1) * 100:.2f}%'
+
         try:
             close_position(sym)
         except Exception as exc:
             log.error(f"Could not close {sym} via broker (unreachable?): {exc} — recording exit in state anyway")
         trades_df = trades_df[trades_df['symbol'] != sym].reset_index(drop=True)
         action = 'EXIT_TIME' if reason == 'time' else 'EXIT_STOP'
-        _append_log(today, sym, action, None, None, reason)
+        _append_log(today, sym, action, None, None, reason, pnl=exit_pnl, pct_return=exit_pct)
 
     # 4. Scan for new signals
     #
@@ -422,8 +461,6 @@ def run():
                     log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
                              f"price_ret={row['price_ret_pct']:.1f}%  vol={row['vol_mult']:.1f}x  "
                              f"trigger={row['trigger_day']}  stop={row['stop_price']:.2f}")
-                    _append_log(today, sym, 'ENTRY', row['entry_open'], row['eps_beat_pct'],
-                                price_ret_pct=row['price_ret_pct'], vol_mult=row['vol_mult'])
 
         except Exception as exc:
             log.warning(f"Error processing {sym}: {exc}")
@@ -451,10 +488,33 @@ def run():
         log.info(f"Rebalance complete (portfolio_value={portfolio_value:.2f})")
         for o in rebalance_orders:
             _append_log(today, o['symbol'], o['action'], o['notional'], None)
+        # Update new-trade entry prices with actual Alpaca fill prices
+        if new_trades:
+            time.sleep(5)  # Allow market orders to fill before querying positions
+            try:
+                actual_prices = get_avg_entry_prices()
+                for t in new_trades:
+                    sym = t['symbol']
+                    if sym in actual_prices:
+                        actual_fill      = actual_prices[sym]
+                        old_price        = t['entry_price']
+                        t['entry_price'] = actual_fill
+                        t['stop_price']  = round(actual_fill * 0.90, 4)
+                        mask = trades_df['symbol'] == sym
+                        trades_df.loc[mask, 'entry_price'] = actual_fill
+                        trades_df.loc[mask, 'stop_price']  = round(actual_fill * 0.90, 4)
+                        log.info(f"Entry price {sym}: yfinance={old_price:.2f} → actual fill={actual_fill:.2f}")
+            except Exception as exc:
+                log.warning(f"Could not fetch actual fill prices from Alpaca: {exc}")
     except Exception as exc:
         log.error(f"Broker unreachable — live rebalance skipped: {exc}")
         log.info(f"[DRY-RUN] Target weights: {target_weights}")
     finally:
+        # Log entries — uses actual fill price if live, yfinance price if dry-run
+        for t in new_trades:
+            _append_log(today, t['symbol'], 'ENTRY', t['entry_price'], t['eps_beat_pct'],
+                        price_ret_pct=t.get('price_ret_pct', ''), vol_mult=t.get('vol_mult', ''),
+                        pnl=0, pct_return='0.00%')
         # 8. Save state, write report, and push to git even when broker is unavailable
         save_state(trades_df)
         log.info("State saved")
