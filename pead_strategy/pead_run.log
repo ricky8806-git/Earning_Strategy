@@ -1,13 +1,16 @@
-2026-06-03 18:34:06,859 INFO === PEAD daily run: 2026-06-03 ===
-2026-06-03 18:34:06,859 INFO Pre-flight connectivity check:
-2026-06-03 18:34:06,920 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-06-03 18:34:06,996 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-06-03 18:34:06,997 INFO Loaded 12 open trades
-2026-06-03 18:34:09,730 INFO EXIT HPE reason=stop_loss
-2026-06-03 18:34:09,867 INFO Prefetching earnings data for 195 symbols...
-2026-06-03 18:38:13,380 INFO Earnings prefetch: 195/195 symbols returned data (100% success rate)
-2026-06-03 18:38:13,860 INFO Active positions: ['SWKS', 'WAT', 'CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'VTRS', 'XYZ', 'ZBRA', 'DELL']
-2026-06-03 18:38:13,860 INFO Target weights:   {'SWKS': 0.07, 'WAT': 0.07, 'CVS': 0.07, 'DVA': 0.07, 'DDOG': 0.07, 'FTNT': 0.07, 'PTC': 0.07, 'VTRS': 0.07, 'XYZ': 0.07, 'ZBRA': 0.07, 'DELL': 0.07, 'SPY': 0.22999999999999998}
-2026-06-03 18:38:14,134 INFO Rebalance complete (portfolio_value=232683.29)
-2026-06-03 18:38:14,135 INFO State saved
-2026-06-03 18:38:14,168 INFO Run report written to run_report.md
+2026-06-04 17:27:45,070 INFO === PEAD daily run: 2026-06-04 ===
+2026-06-04 17:27:45,072 INFO Migrated trades_log.csv: added pnl and pct_return columns
+2026-06-04 17:27:45,072 INFO Pre-flight connectivity check:
+2026-06-04 17:27:45,110 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-06-04 17:27:45,296 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-06-04 17:27:45,297 INFO Loaded 11 open trades
+2026-06-04 17:27:47,109 INFO EXIT SWKS reason=time
+2026-06-04 17:27:47,259 INFO EXIT WAT reason=time
+2026-06-04 17:27:47,348 INFO EXIT VTRS reason=stop_loss
+2026-06-04 17:27:47,465 INFO Prefetching earnings data for 198 symbols...
+2026-06-04 17:29:40,853 INFO Earnings prefetch: 198/198 symbols returned data (100% success rate)
+2026-06-04 17:29:41,967 INFO Active positions: ['CVS', 'DVA', 'DDOG', 'FTNT', 'PTC', 'XYZ', 'ZBRA', 'DELL']
+2026-06-04 17:29:41,967 INFO Target weights:   {'CVS': 0.07, 'DVA': 0.07, 'DDOG': 0.07, 'FTNT': 0.07, 'PTC': 0.07, 'XYZ': 0.07, 'ZBRA': 0.07, 'DELL': 0.07, 'SPY': 0.43999999999999995}
+2026-06-04 17:29:42,225 INFO Rebalance complete (portfolio_value=233106.31)
+2026-06-04 17:29:42,226 INFO State saved
+2026-06-04 17:29:42,263 INFO Run report written to run_report.md
