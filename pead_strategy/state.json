@@ -1,22 +1,6 @@
 {
   "open_trades": [
     {
-      "symbol": "SWKS",
-      "entry_date": "2026-05-06",
-      "entry_price": 68.0,
-      "stop_price": 61.2,
-      "eps_beat_pct": 10.576923076923064,
-      "earnings_date": "2026-05-05"
-    },
-    {
-      "symbol": "WAT",
-      "entry_date": "2026-05-06",
-      "entry_price": 344.0,
-      "stop_price": 309.6,
-      "eps_beat_pct": 16.883116883116887,
-      "earnings_date": "2026-05-05"
-    },
-    {
       "symbol": "CVS",
       "entry_date": "2026-05-07",
       "entry_price": 87.0,
@@ -55,14 +39,6 @@
       "stop_price": 131.69700164794924,
       "eps_beat_pct": 27.48815165876778,
       "earnings_date": "2026-05-06"
-    },
-    {
-      "symbol": "VTRS",
-      "entry_date": "2026-05-08",
-      "entry_price": 17.299999237060547,
-      "stop_price": 15.569999313354492,
-      "eps_beat_pct": 17.999999999999993,
-      "earnings_date": "2026-05-07"
     },
     {
       "symbol": "XYZ",
