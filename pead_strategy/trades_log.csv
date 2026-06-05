@@ -832,3 +832,12 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-06-04,PANW,SCAN_MISS,,0.85,,,eps_low:6.2%,,
 2026-06-04,VEEV,SCAN_MISS,,2.24,,,eps_low:4.7%,,
 2026-06-04,SPY,REBALANCE_BUY,48960.264827999985,,,,,,
+2026-06-05,CVS,EXIT_TIME,,,,,time,1315.68,8.60%
+2026-06-05,DVA,EXIT_TIME,,,,,time,-33.95,-0.27%
+2026-06-05,AVGO,SCAN_MISS,,2.44,,,eps_low:1.7%,,
+2026-06-05,CIEN,SCAN_MISS,,1.49,,,price_low:-13.7%,,
+2026-06-05,COO,SCAN_MISS,,1.21,,,price_low:2.8%+vol_low:1.5x,,
+2026-06-05,CRWD,SCAN_MISS,,1.1,,,eps_low:2.8%,,
+2026-06-05,MDT,SCAN_MISS,,1.55,,,eps_low:0.6%,,
+2026-06-05,VEEV,SCAN_MISS,,2.24,,,eps_low:4.7%,,
+2026-06-05,SPY,REBALANCE_BUY,31671.940083999987,,,,,,

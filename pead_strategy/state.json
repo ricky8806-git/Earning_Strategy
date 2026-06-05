@@ -1,22 +1,6 @@
 {
   "open_trades": [
     {
-      "symbol": "CVS",
-      "entry_date": "2026-05-07",
-      "entry_price": 87.0,
-      "stop_price": 78.3,
-      "eps_beat_pct": 16.28959276018099,
-      "earnings_date": "2026-05-06"
-    },
-    {
-      "symbol": "DVA",
-      "entry_date": "2026-05-07",
-      "entry_price": 194.32000732421875,
-      "stop_price": 174.88800659179688,
-      "eps_beat_pct": 23.175965665236053,
-      "earnings_date": "2026-05-05"
-    },
-    {
       "symbol": "DDOG",
       "entry_date": "2026-05-08",
       "entry_price": 185.5,
