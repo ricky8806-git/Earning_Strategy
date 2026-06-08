@@ -2,16 +2,23 @@ name: PEAD Daily Run
 
 on:
   schedule:
-    # 15:00 UTC = 10:00 AM EST (winter/Nov–Mar)
-    - cron: '0 15 * * 1-5'
-    # 14:00 UTC = 10:00 AM EDT (summer/Mar–Nov)
+    # Primary pair: 14:00 UTC = 10:00 AM EDT (summer) / 15:00 UTC = 10:00 AM EST (winter)
     - cron: '0 14 * * 1-5'
+    - cron: '0 15 * * 1-5'
+    # Hourly fallbacks — fire if GitHub drops the earlier entries.
+    # The guard step below exits early once today's run is confirmed done,
+    # so only the first cron that actually fires will execute the strategy.
+    - cron: '0 16 * * 1-5'
+    - cron: '0 17 * * 1-5'
+    - cron: '0 18 * * 1-5'
   workflow_dispatch: {}   # allow manual trigger from the Actions tab
 
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
-    # Prevent both cron entries from racing each other during the overlap window
+    # Layer 1 safety: prevents two cron entries from running simultaneously.
+    # cancel-in-progress: false queues a second trigger rather than killing
+    # an in-flight run, so a slow run is never interrupted.
     concurrency:
       group: pead-daily
       cancel-in-progress: false
@@ -22,8 +29,36 @@ jobs:
         with:
           # Use a PAT so the push inside main.py can write back to main
           token: ${{ secrets.GH_PAT }}
+          # Fetch enough history so git log can find today's run_report.md commit
+          fetch-depth: 10
+
+      # Layer 2 safety: skip if today's run already completed.
+      # run_report.md is always committed at the end of every successful run,
+      # so its last commit date is a reliable "already ran today" signal.
+      # Manual workflow_dispatch bypasses this check so reruns are always allowed.
+      - name: Guard — skip if already ran today
+        id: guard
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch — skipping guard check"
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          LAST=$(git log -1 --format="%cd" --date=format:"%Y-%m-%d" \
+                   -- pead_strategy/run_report.md 2>/dev/null || echo "")
+          TODAY=$(date -u +%Y-%m-%d)
+          echo "run_report.md last commit : $LAST"
+          echo "Today (UTC)               : $TODAY"
+          if [ "$LAST" = "$TODAY" ]; then
+            echo "Strategy already ran today — this is a redundant fallback trigger, exiting."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "No completed run today yet — proceeding."
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Python
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -31,9 +66,11 @@ jobs:
           cache-dependency-path: pead_strategy/requirements.txt
 
       - name: Install dependencies
+        if: steps.guard.outputs.skip != 'true'
         run: pip install -r pead_strategy/requirements.txt -q
 
       - name: Test Alpaca connection
+        if: steps.guard.outputs.skip != 'true'
         env:
           ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
@@ -50,6 +87,7 @@ jobs:
           EOF
 
       - name: Run PEAD strategy
+        if: steps.guard.outputs.skip != 'true'
         env:
           ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
@@ -58,7 +96,7 @@ jobs:
         run: python main.py 2>&1 | tee ../pead_run.log; exit ${PIPESTATUS[0]}
 
       - name: Push log via GitHub API (always, even on failure)
-        if: always()
+        if: always() && steps.guard.outputs.skip != 'true'
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
@@ -79,7 +117,7 @@ jobs:
             -d "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Pushed log:', d.get('content',{}).get('name','?'))"
 
       - name: Upload logs as artifact (always, even on failure)
-        if: always()
+        if: always() && steps.guard.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: pead-logs-${{ github.run_id }}
