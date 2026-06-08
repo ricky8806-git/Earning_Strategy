@@ -1,6 +1,6 @@
 # pead_strategy/main.py
 """
-Daily runner — designed to execute at 9:31 AM ET after market open.
+Daily runner — designed to execute at 10:00 AM ET after market open.
 
 Flow:
   1. Load state (open trades)
@@ -255,11 +255,8 @@ def _push_state():
         return
 
     push_url = f"https://x-access-token:{GITHUB_TOKEN}@github.com/ricky8806-git/Earning_Strategy.git"
-    # HEAD:main works whether HEAD is on branch main or in detached-HEAD mode
-    # (GitHub Actions checkout leaves HEAD detached by default).
     push = _git('push', push_url, 'HEAD:main')
     if push.returncode != 0:
-        # Remote may have new commits (another runner pushed first) — fetch-rebase and retry once
         log.warning(f"git push failed (first attempt): {push.stderr.strip()[:120]}")
         _git('fetch', push_url, 'main:refs/remotes/origin/main')
         _git('rebase', 'refs/remotes/origin/main')
@@ -292,7 +289,6 @@ def _migrate_log():
 def run():
     from portfolio import _NYSE
     today = date.today()
-    # Find the most recent prior trading session (handles weekends + holidays)
     sched     = _NYSE.schedule(
         start_date=str(today - timedelta(days=10)),
         end_date=str(today - timedelta(days=1)),
@@ -318,7 +314,7 @@ def run():
 
     # 3. Check exits (time exit OR stop loss)
     exited_raw = check_exits(trades_df, prices_dict, today)
-    exited: list = []          # de-duped exit list (for report)
+    exited: list = []
     seen_exits: set = set()
     for exit_info in exited_raw:
         sym    = exit_info['symbol']
@@ -329,7 +325,6 @@ def run():
         exited.append(exit_info)
         log.info(f"EXIT {sym} reason={reason}")
 
-        # Capture P&L before closing — Alpaca's cost basis reflects actual fill price
         exit_pnl, exit_pct = '', ''
         try:
             pnl_dollars, pnl_pct = get_position_pnl(sym)
@@ -338,7 +333,6 @@ def run():
                 exit_pct = f'{pnl_pct:.2f}%'
         except Exception:
             pass
-        # Fallback: compute from prices_dict close vs stored entry_price
         if exit_pct == '':
             trade_row = trades_df[trades_df['symbol'] == sym]
             if not trade_row.empty and sym in prices_dict and not prices_dict[sym].empty:
@@ -355,10 +349,6 @@ def run():
         _append_log(today, sym, action, None, None, reason, pnl=exit_pnl, pct_return=exit_pct)
 
     # 4. Scan for new signals
-    #
-    # Two scan windows, each restricted to the trigger type that has valid data at 9:31 AM:
-    #   yesterday    → D0 trigger only  (D1 close unavailable; entry = today's open)
-    #   two_days_ago → D1 trigger only  (yesterday's full close = D1; entry = today's open)
     two_days_ago = sched.index[-2].date() if len(sched) >= 2 else yesterday - timedelta(days=1)
     scan_plan    = [(yesterday, 'd0'), (two_days_ago, 'd1')]
 
@@ -366,9 +356,6 @@ def run():
     new_trades   = []
     already_open = set(trades_df['symbol'].tolist())
 
-    # --- Data quality gate ---
-    # Prefetch all earnings before scanning so a systemic fetch failure (missing
-    # dependency, Yahoo rate-limit, etc.) is caught and logged before any analysis.
     scan_candidates = [s for s in symbols if s not in already_open]
     log.info(f"Prefetching earnings data for {len(scan_candidates)} symbols...")
     earnings_cache: dict = {}
@@ -396,7 +383,7 @@ def run():
             f"earnings data — likely cause: {likely_cause}  "
             f"New-signal scan aborted; existing positions will still be managed."
         )
-        scan_candidates = []  # skip the signal scan entirely
+        scan_candidates = []
 
     for sym in scan_candidates:
         earnings = earnings_cache.get(sym)
@@ -409,14 +396,13 @@ def run():
 
             price_start = (two_days_ago - timedelta(days=_LOOKBACK_DAYS)).isoformat()
             price_end   = (today + timedelta(days=3)).isoformat()
-            prices      = None  # lazy-load once we find a relevant earnings date
+            prices      = None
 
             for scan_date, trigger_type in scan_plan:
                 recent = earnings[earnings['earnings_date'].dt.date == scan_date]
                 if recent.empty:
                     continue
 
-                # yfinance data lag: date present but eps_actual not yet populated
                 if recent['eps_actual'].isna().all():
                     _append_log(today, sym, 'SCAN_MISS', None, None, 'no_eps_actual_yet')
                     continue
@@ -457,7 +443,7 @@ def run():
                         'vol_mult':      row['vol_mult'],
                     }
                     new_trades.append(new_trade)
-                    already_open.add(sym)  # prevent double-entry across scan windows
+                    already_open.add(sym)
                     log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
                              f"price_ret={row['price_ret_pct']:.1f}%  vol={row['vol_mult']:.1f}x  "
                              f"trigger={row['trigger_day']}  stop={row['stop_price']:.2f}")
@@ -476,7 +462,7 @@ def run():
     log.info(f"Active positions: {active}")
     log.info(f"Target weights:   {target_weights}")
 
-    # 7. Rebalance — save state and push regardless of broker availability
+    # 7. Rebalance
     rebalance_orders: list = []
     is_live         = False
     portfolio_value = None
@@ -488,9 +474,8 @@ def run():
         log.info(f"Rebalance complete (portfolio_value={portfolio_value:.2f})")
         for o in rebalance_orders:
             _append_log(today, o['symbol'], o['action'], o['notional'], None)
-        # Update new-trade entry prices with actual Alpaca fill prices
         if new_trades:
-            time.sleep(5)  # Allow market orders to fill before querying positions
+            time.sleep(5)
             try:
                 actual_prices = get_avg_entry_prices()
                 for t in new_trades:
@@ -510,12 +495,10 @@ def run():
         log.error(f"Broker unreachable — live rebalance skipped: {exc}")
         log.info(f"[DRY-RUN] Target weights: {target_weights}")
     finally:
-        # Log entries — uses actual fill price if live, yfinance price if dry-run
         for t in new_trades:
             _append_log(today, t['symbol'], 'ENTRY', t['entry_price'], t['eps_beat_pct'],
                         price_ret_pct=t.get('price_ret_pct', ''), vol_mult=t.get('vol_mult', ''),
                         pnl=0, pct_return='0.00%')
-        # 8. Save state, write report, and push to git even when broker is unavailable
         save_state(trades_df)
         log.info("State saved")
         _write_run_report(

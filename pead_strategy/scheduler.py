@@ -2,7 +2,7 @@
 """
 Timezone-aware scheduler.
 
-  09:31 ET — run main.py (market open runner)
+  10:00 ET — run main.py (market open runner)
   18:00 ET — run a pre-scan to log potential next-day entries
 
 Runs as a long-lived process; checks time every 30 seconds.
@@ -88,7 +88,7 @@ print(f"[prescan] Done. {found} signals identified for tomorrow.")
 
 def main():
     print(f"[scheduler] Started at {_et_now()}")
-    print("[scheduler] Will run main.py at 09:31 ET and pre-scan at 18:00 ET")
+    print("[scheduler] Will run main.py at 10:00 ET and pre-scan at 18:00 ET")
 
     last_open_run  = None
     last_close_run = None
@@ -97,7 +97,7 @@ def main():
         now   = _et_now()
         today = now.date()
 
-        if now.hour == 9 and now.minute == 31 and last_open_run != today and _is_nyse_trading_day(now):
+        if now.hour == 10 and now.minute == 0 and last_open_run != today and _is_nyse_trading_day(now):
             print(f"[scheduler] Triggering market-open run at {now}")
             _run_script('main.py')
             last_open_run = today
