@@ -1,13 +1,15 @@
 name: PEAD Live Analysis (self-hosted)
 
-# Runs on YOUR local machine via a self-hosted runner so Yahoo Finance
+# Runs on YOUR local Windows machine via a self-hosted runner so Yahoo Finance
 # is not IP-blocked. Generates run_plan.json and pushes it to git.
 # The cloud PEAD Live execution agent then reads the plan and trades on Robinhood.
 #
-# One-time setup on your Mac:
+# One-time setup on your Windows PC:
 #   1. Go to: https://github.com/ricky8806-git/Earning_Strategy/settings/actions/runners/new
-#   2. Select macOS, follow the install + start instructions (~5 min)
+#   2. Select Windows, follow the install + start instructions (~5 min)
 #   3. That's it — this workflow fires automatically after that.
+#
+# Note: requires Git for Windows (git-scm.com) — you almost certainly have it already.
 
 on:
   schedule:
@@ -24,6 +26,10 @@ jobs:
       group: pead-live-analysis
       cancel-in-progress: false
 
+    defaults:
+      run:
+        shell: bash   # Git for Windows provides bash; works on Mac/Linux too
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -37,26 +43,27 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Manual dispatch — skipping guard"
-            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "skip=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           LAST=$(git log -1 --format="%cd" --date=format:"%Y-%m-%d" \
                    -- pead_live/run_plan.json 2>/dev/null || echo "")
-          TODAY=$(date -u +%Y-%m-%d)
+          TODAY=$(python -c "from datetime import date, timezone; print(date.today(timezone.utc))" \
+                  2>/dev/null || date -u +%Y-%m-%d)
           echo "run_plan.json last commit: $LAST  |  Today (UTC): $TODAY"
           if [ "$LAST" = "$TODAY" ]; then
             echo "Analysis already ran today — skipping duplicate trigger."
-            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "skip=true" >> "$GITHUB_OUTPUT"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Install dependencies
         if: steps.guard.outputs.skip != 'true'
-        run: pip3 install -r pead_live/requirements.txt -q
+        run: python -m pip install -r pead_live/requirements.txt -q
 
       - name: Run analysis
         if: steps.guard.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: python3 pead_live/analysis.py
+        run: python pead_live/analysis.py
