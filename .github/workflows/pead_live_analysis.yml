@@ -26,12 +26,41 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 5
 
+      - name: Locate Python
+        shell: powershell
+        run: |
+          # Prefer python/py already in PATH
+          $pyExe = $null
+          foreach ($cmd in @('python','py')) {
+            try {
+              $p = (Get-Command $cmd -ErrorAction Stop).Source
+              & $p --version 2>&1 | Out-Null
+              $pyExe = $p; break
+            } catch {}
+          }
+          # Fall back: search all user profiles and Program Files
+          if (-not $pyExe) {
+            $searchRoots = @('C:\Users','C:\Program Files','C:\Program Files (x86)')
+            foreach ($root in $searchRoots) {
+              $hit = Get-ChildItem $root -Recurse -Filter 'python.exe' -ErrorAction SilentlyContinue |
+                     Where-Object { $_.DirectoryName -notmatch '\\Scripts' } |
+                     Select-Object -First 1
+              if ($hit) { $pyExe = $hit.FullName; break }
+            }
+          }
+          if (-not $pyExe) {
+            Write-Host "##[error]Python not found. Fix: in services.msc set the runner service Log On account to your Windows user, then restart the service."
+            exit 1
+          }
+          Write-Host "Using Python: $pyExe"
+          Add-Content $env:GITHUB_ENV "PYTHON_EXE=$pyExe"
+
       - name: Install dependencies
         shell: powershell
-        run: py -m pip install -r pead_live/requirements.txt -q
+        run: '& "$env:PYTHON_EXE" -m pip install -r pead_live/requirements.txt -q'
 
       - name: Run analysis
         shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: py pead_live/analysis.py
+        run: '& "$env:PYTHON_EXE" pead_live/analysis.py'
