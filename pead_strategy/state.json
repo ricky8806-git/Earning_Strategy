@@ -1,38 +1,6 @@
 {
   "open_trades": [
     {
-      "symbol": "DDOG",
-      "entry_date": "2026-05-08",
-      "entry_price": 185.5,
-      "stop_price": 166.95000000000002,
-      "eps_beat_pct": 114.28571428571426,
-      "earnings_date": "2026-05-07"
-    },
-    {
-      "symbol": "FTNT",
-      "entry_date": "2026-05-08",
-      "entry_price": 106.66999816894531,
-      "stop_price": 96.00299835205078,
-      "eps_beat_pct": 32.258064516129025,
-      "earnings_date": "2026-05-06"
-    },
-    {
-      "symbol": "PTC",
-      "entry_date": "2026-05-08",
-      "entry_price": 146.3300018310547,
-      "stop_price": 131.69700164794924,
-      "eps_beat_pct": 27.48815165876778,
-      "earnings_date": "2026-05-06"
-    },
-    {
-      "symbol": "XYZ",
-      "entry_date": "2026-05-11",
-      "entry_price": 75.08999633789062,
-      "stop_price": 67.58099670410157,
-      "eps_beat_pct": 24.99999999999999,
-      "earnings_date": "2026-05-07"
-    },
-    {
       "symbol": "ZBRA",
       "entry_date": "2026-05-13",
       "entry_price": 247.83999633789062,
