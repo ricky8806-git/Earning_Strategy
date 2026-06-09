@@ -28,10 +28,10 @@ jobs:
 
       - name: Install dependencies
         shell: powershell
-        run: python -m pip install -r pead_live/requirements.txt -q
+        run: py -m pip install -r pead_live/requirements.txt -q
 
       - name: Run analysis
         shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: python pead_live/analysis.py
+        run: py pead_live/analysis.py
