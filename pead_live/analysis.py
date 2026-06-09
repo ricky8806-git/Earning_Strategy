@@ -48,6 +48,7 @@ def run():
     from portfolio import check_exits, get_active_positions, get_portfolio_weights
     from data import get_earnings, get_prices, get_sp500_symbols
     from signals import build_signals, get_miss_reason
+    near_misses = []  # [(sym, scan_date, trigger_type, reason)]
 
     today = date.today()
     nyse = mcal.get_calendar('NYSE')
@@ -175,27 +176,36 @@ def run():
                         signals = build_signals(recent, prices)
                         signals = signals[signals['trigger_day'] == trigger_type]
 
-                        for _, row in signals.iterrows():
-                            entry_dt = row['entry_date']
-                            if hasattr(entry_dt, 'date'):
-                                entry_dt = entry_dt.date()
-                            new_entries.append({
-                                'symbol': sym,
-                                'entry_date': str(entry_dt),
-                                'entry_price': float(row['entry_open']),
-                                'stop_price': float(row['stop_price']),
-                                'eps_beat_pct': float(row['eps_beat_pct']),
-                                'earnings_date': str(scan_date),
-                                'price_ret_pct': (float(row['price_ret_pct'])
-                                                  if row.get('price_ret_pct', '') != '' else None),
-                                'vol_mult': (float(row['vol_mult'])
-                                             if row.get('vol_mult', '') != '' else None),
-                            })
-                            already_open.add(sym)
-                            log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
-                                     f"trigger={trigger_type}")
+                        if signals.empty:
+                            reason = get_miss_reason(recent, prices, trigger_type)
+                            near_misses.append((sym, scan_date, trigger_type, reason))
+                        else:
+                            for _, row in signals.iterrows():
+                                entry_dt = row['entry_date']
+                                if hasattr(entry_dt, 'date'):
+                                    entry_dt = entry_dt.date()
+                                new_entries.append({
+                                    'symbol': sym,
+                                    'entry_date': str(entry_dt),
+                                    'entry_price': float(row['entry_open']),
+                                    'stop_price': float(row['stop_price']),
+                                    'eps_beat_pct': float(row['eps_beat_pct']),
+                                    'earnings_date': str(scan_date),
+                                    'price_ret_pct': (float(row['price_ret_pct'])
+                                                      if row.get('price_ret_pct', '') != '' else None),
+                                    'vol_mult': (float(row['vol_mult'])
+                                                 if row.get('vol_mult', '') != '' else None),
+                                })
+                                already_open.add(sym)
+                                log.info(f"SIGNAL {sym}  eps_beat={row['eps_beat_pct']:.1f}%  "
+                                         f"trigger={trigger_type}")
                 except Exception as exc:
                     log.warning(f"Error scanning {sym}: {exc}")
+
+        if near_misses:
+            log.info(f"Near-misses ({len(near_misses)} stocks had earnings but no signal):")
+            for sym, scan_date, trigger, reason in near_misses:
+                log.info(f"  SKIP {sym:6s}  date={scan_date}  trigger={trigger}  reason={reason}")
 
     except Exception as exc:
         log.warning(f"New-entry scan failed: {exc} — proceeding with no new entries")
