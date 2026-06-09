@@ -259,6 +259,8 @@ def _push_plan(today):
             capture_output=True, text=True, timeout=60,
         )
 
+    # Fix "dubious ownership" when runner service account differs from repo owner
+    _git('config', '--global', '--add', 'safe.directory', str(repo_root).replace('\\', '/'))
     _git('config', 'user.email', 'pead-live-bot@auto')
     _git('config', 'user.name', 'PEAD Live Agent')
     _git('add', 'pead_live/run_plan.json', 'pead_live/state.json')
