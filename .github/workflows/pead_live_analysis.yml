@@ -29,7 +29,7 @@ jobs:
       - name: Locate Python
         shell: powershell
         run: |
-          # Prefer python/py already in PATH
+          # Try PATH first (works if runner runs as user or system PATH includes Python)
           $pyExe = $null
           foreach ($cmd in @('python','py')) {
             try {
@@ -38,18 +38,23 @@ jobs:
               $pyExe = $p; break
             } catch {}
           }
-          # Fall back: search all user profiles and Program Files
+          # Fall back: try known per-user install path for ricky on this machine
           if (-not $pyExe) {
-            $searchRoots = @('C:\Users','C:\Program Files','C:\Program Files (x86)')
-            foreach ($root in $searchRoots) {
-              $hit = Get-ChildItem $root -Recurse -Filter 'python.exe' -ErrorAction SilentlyContinue |
-                     Where-Object { $_.DirectoryName -notmatch '\\Scripts' } |
-                     Select-Object -First 1
-              if ($hit) { $pyExe = $hit.FullName; break }
+            $candidates = @(
+              'C:\Users\ricky\AppData\Local\Programs\Python\Python312\python.exe',
+              'C:\Users\ricky\AppData\Local\Programs\Python\Python311\python.exe',
+              'C:\Users\ricky\AppData\Local\Programs\Python\Python310\python.exe',
+              'C:\Users\ricky\AppData\Local\Programs\Python\Python39\python.exe',
+              'C:\Program Files\Python312\python.exe',
+              'C:\Program Files\Python311\python.exe',
+              'C:\Program Files\Python310\python.exe'
+            )
+            foreach ($c in $candidates) {
+              if (Test-Path $c) { $pyExe = $c; break }
             }
           }
           if (-not $pyExe) {
-            Write-Host "##[error]Python not found. Fix: in services.msc set the runner service Log On account to your Windows user, then restart the service."
+            Write-Host "##[error]Python not found. Reinstall Python choosing 'Install for all users', or change runner service Log On to your Windows user account."
             exit 1
           }
           Write-Host "Using Python: $pyExe"
