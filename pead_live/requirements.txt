@@ -1,0 +1,5 @@
+yfinance>=0.2.37
+lxml>=4.9.0
+pandas>=2.0.0
+pandas-market-calendars>=4.3.3
+requests>=2.31.0
