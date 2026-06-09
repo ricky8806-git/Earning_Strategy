@@ -28,7 +28,7 @@ jobs:
 
       - name: Guard — skip if already ran today
         id: guard
-        shell: pwsh
+        shell: powershell
         run: |
           if ("${{ github.event_name }}" -eq "workflow_dispatch") {
             Write-Output "Manual dispatch — skipping guard"
@@ -36,7 +36,7 @@ jobs:
             exit 0
           }
           $last = git log -1 --format="%cd" --date=format:"%Y-%m-%d" -- pead_live/run_plan.json 2>$null
-          $today = (Get-Date -AsUTC).ToString("yyyy-MM-dd")
+          $today = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd")
           Write-Output "run_plan.json last commit: $last  |  Today (UTC): $today"
           if ($last -eq $today) {
             Write-Output "Analysis already ran today — skipping duplicate trigger."
@@ -47,12 +47,12 @@ jobs:
 
       - name: Install dependencies
         if: steps.guard.outputs.skip != 'true'
-        shell: pwsh
+        shell: powershell
         run: python -m pip install -r pead_live/requirements.txt -q
 
       - name: Run analysis
         if: steps.guard.outputs.skip != 'true'
-        shell: pwsh
+        shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: python pead_live/analysis.py
