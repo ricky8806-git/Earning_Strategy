@@ -1,14 +1,16 @@
-2026-06-05 16:58:34,876 INFO === PEAD daily run: 2026-06-05 ===
-2026-06-05 16:58:34,877 INFO Pre-flight connectivity check:
-2026-06-05 16:58:34,989 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-06-05 16:58:35,156 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-06-05 16:58:35,158 INFO Loaded 8 open trades
-2026-06-05 16:58:38,276 INFO EXIT CVS reason=time
-2026-06-05 16:58:38,744 INFO EXIT DVA reason=time
-2026-06-05 16:58:39,210 INFO Prefetching earnings data for 199 symbols...
-2026-06-05 17:00:41,789 INFO Earnings prefetch: 199/199 symbols returned data (100% success rate)
-2026-06-05 17:00:44,575 INFO Active positions: ['DDOG', 'FTNT', 'PTC', 'XYZ', 'ZBRA', 'DELL']
-2026-06-05 17:00:44,575 INFO Target weights:   {'DDOG': 0.07, 'FTNT': 0.07, 'PTC': 0.07, 'XYZ': 0.07, 'ZBRA': 0.07, 'DELL': 0.07, 'SPY': 0.58}
-2026-06-05 17:00:44,983 INFO Rebalance complete (portfolio_value=228475.57)
-2026-06-05 17:00:44,984 INFO State saved
-2026-06-05 17:00:45,013 INFO Run report written to run_report.md
+2026-06-09 16:31:59,988 INFO === PEAD daily run: 2026-06-09 ===
+2026-06-09 16:31:59,990 INFO Pre-flight connectivity check:
+2026-06-09 16:32:00,125 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-06-09 16:32:00,338 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-06-09 16:32:00,340 INFO Loaded 6 open trades
+2026-06-09 16:32:02,572 INFO EXIT DDOG reason=time
+2026-06-09 16:32:03,253 INFO EXIT FTNT reason=time
+2026-06-09 16:32:03,664 INFO EXIT PTC reason=time
+2026-06-09 16:32:04,086 INFO EXIT XYZ reason=time
+2026-06-09 16:32:04,583 INFO Prefetching earnings data for 203 symbols...
+2026-06-09 16:34:15,429 INFO Earnings prefetch: 203/203 symbols returned data (100% success rate)
+2026-06-09 16:34:15,604 INFO Active positions: ['ZBRA', 'DELL']
+2026-06-09 16:34:15,604 INFO Target weights:   {'ZBRA': 0.07, 'DELL': 0.07, 'SPY': 0.86}
+2026-06-09 16:34:16,320 INFO Rebalance complete (portfolio_value=221457.18)
+2026-06-09 16:34:16,322 INFO State saved
+2026-06-09 16:34:16,334 INFO Run report written to run_report.md
