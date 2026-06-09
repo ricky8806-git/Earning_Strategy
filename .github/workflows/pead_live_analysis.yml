@@ -6,10 +6,11 @@ name: PEAD Live Analysis (self-hosted)
 
 on:
   schedule:
-    # 7:00 AM PST = 15:00 UTC (standard time Nov–Mar)
-    - cron: '0 15 * * 1-5'
-    # 7:00 AM PDT = 14:00 UTC (daylight time Mar–Nov)
-    - cron: '0 14 * * 1-5'
+    # 6:30 AM PST = 14:30 UTC (standard time Nov–Mar)
+    # Runs 30 min before the 7am ET execution session so run_plan.json is ready
+    - cron: '30 14 * * 1-5'
+    # 6:30 AM PDT = 13:30 UTC (daylight time Mar–Nov)
+    - cron: '30 13 * * 1-5'
   workflow_dispatch: {}
 
 jobs:
