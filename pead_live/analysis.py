@@ -3,9 +3,18 @@
 pead_live/analysis.py
 Generates run_plan.json for today's Robinhood live trading run.
 Uses pead_strategy modules for signal logic; reads/writes pead_live/state.json.
+
+Run locally each morning before market open:
+    cd /path/to/Earning_Strategy
+    python pead_live/analysis.py
+
+The script generates run_plan.json and pushes it to git so the cloud
+Robinhood execution agent can pick it up automatically.
 """
 import json
 import logging
+import os
+import subprocess
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -232,6 +241,51 @@ def run():
     log.info(f"run_plan.json written: {len(exits)} exits, {len(new_entries)} new entries, "
              f"{len(target_weights)} target symbols")
 
+    _push_plan(today)
+
+
+def _push_plan(today):
+    """Commit run_plan.json and push to git so the cloud execution agent picks it up."""
+    github_token = os.environ.get('GITHUB_TOKEN', '')
+    if not github_token:
+        log.warning("GITHUB_TOKEN not set — skipping git push (run_plan.json saved locally only)")
+        return
+
+    repo_root = Path(__file__).resolve().parent.parent
+
+    def _git(*args):
+        return subprocess.run(
+            ['git', *args], cwd=repo_root,
+            capture_output=True, text=True, timeout=60,
+        )
+
+    _git('config', 'user.email', 'pead-live-bot@auto')
+    _git('config', 'user.name', 'PEAD Live Agent')
+    _git('add', 'pead_live/run_plan.json', 'pead_live/state.json')
+
+    diff = _git('diff', '--cached', '--quiet')
+    if diff.returncode == 0:
+        log.info("run_plan.json unchanged — nothing to push")
+        return
+
+    commit = _git('commit', '-m', f'chore: run_plan {today} [skip ci]')
+    if commit.returncode != 0:
+        log.warning(f"git commit failed: {commit.stderr.strip()}")
+        return
+
+    push_url = f"https://x-access-token:{github_token}@github.com/ricky8806-git/Earning_Strategy.git"
+    push = _git('push', push_url, 'HEAD:main')
+    if push.returncode != 0:
+        log.warning(f"git push failed, trying rebase: {push.stderr.strip()[:120]}")
+        _git('fetch', push_url, 'main:refs/remotes/origin/main')
+        _git('rebase', 'refs/remotes/origin/main')
+        push2 = _git('push', push_url, 'HEAD:main')
+        if push2.returncode != 0:
+            log.warning(f"git push retry failed: {push2.stderr.strip()[:120]}")
+        else:
+            log.info("run_plan.json pushed to git (after rebase)")
+    else:
+        log.info("run_plan.json pushed to git")
 
 if __name__ == '__main__':
     run()
