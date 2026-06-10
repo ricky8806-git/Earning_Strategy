@@ -1,4 +1,4 @@
-# pead_live/run_local.ps1
+﻿# pead_live/run_local.ps1
 # Run manually from PowerShell if you ever want to trigger analysis outside the schedule:
 #   cd C:\path\to\Earning_Strategy
 #   .\pead_live\run_local.ps1
@@ -16,7 +16,7 @@ if (Test-Path $envFile) {
         }
     }
 } else {
-    Write-Error "Missing $envFile — copy pead_live\.env.example to pead_live\.env and fill in GITHUB_TOKEN"
+    Write-Error "Missing $envFile -- copy pead_live\.env.example to pead_live\.env and fill in GITHUB_TOKEN"
 }
 
 Add-Content $logFile "$(Get-Date): Starting PEAD live analysis"
