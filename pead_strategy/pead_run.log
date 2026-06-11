@@ -1,12 +1,14 @@
-2026-06-10 17:21:06,487 INFO === PEAD daily run: 2026-06-10 ===
-2026-06-10 17:21:06,488 INFO Pre-flight connectivity check:
-2026-06-10 17:21:06,535 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-06-10 17:21:06,630 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-06-10 17:21:06,632 INFO Loaded 2 open trades
-2026-06-10 17:21:07,249 INFO Prefetching earnings data for 203 symbols...
-2026-06-10 17:23:10,045 INFO Earnings prefetch: 203/203 symbols returned data (100% success rate)
-2026-06-10 17:23:10,185 INFO Active positions: ['ZBRA', 'DELL']
-2026-06-10 17:23:10,186 INFO Target weights:   {'ZBRA': 0.07, 'DELL': 0.07, 'SPY': 0.86}
-2026-06-10 17:23:10,399 INFO Rebalance complete (portfolio_value=222079.16)
-2026-06-10 17:23:10,400 INFO State saved
-2026-06-10 17:23:10,410 INFO Run report written to run_report.md
+2026-06-11 17:37:12,039 INFO === PEAD daily run: 2026-06-11 ===
+2026-06-11 17:37:12,040 INFO Pre-flight connectivity check:
+2026-06-11 17:37:12,081 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-06-11 17:37:12,308 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-06-11 17:37:12,310 INFO Loaded 2 open trades
+2026-06-11 17:37:12,766 INFO EXIT ZBRA reason=time
+2026-06-11 17:37:13,260 INFO EXIT DELL reason=stop_loss
+2026-06-11 17:37:13,919 INFO Prefetching earnings data for 205 symbols...
+2026-06-11 17:39:17,331 INFO Earnings prefetch: 205/205 symbols returned data (100% success rate)
+2026-06-11 17:39:17,695 INFO Active positions: []
+2026-06-11 17:39:17,695 INFO Target weights:   {'SPY': 1.0}
+2026-06-11 17:39:18,318 INFO Rebalance complete (portfolio_value=223200.75)
+2026-06-11 17:39:18,319 INFO State saved
+2026-06-11 17:39:18,320 INFO Run report written to run_report.md
