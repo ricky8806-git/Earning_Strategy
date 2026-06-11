@@ -6,11 +6,15 @@ name: PEAD Live Analysis (self-hosted)
 
 on:
   schedule:
-    # 6:30 AM PST = 14:30 UTC (standard time Nov–Mar)
-    # Runs 30 min before the 7am ET execution session so run_plan.json is ready
-    - cron: '30 14 * * 1-5'
-    # 6:30 AM PDT = 13:30 UTC (daylight time Mar–Nov)
+    # Primary: 6:30 AM PDT = 13:30 UTC (daylight time Mar–Nov)
     - cron: '30 13 * * 1-5'
+    # Primary: 6:30 AM PST = 14:30 UTC (standard time Nov–Mar)
+    - cron: '30 14 * * 1-5'
+    # Hourly fallbacks through 10 AM PT -- fire if GitHub drops the earlier entries.
+    # The guard step below exits early once today's run is confirmed done.
+    - cron: '30 15 * * 1-5'
+    - cron: '30 16 * * 1-5'
+    - cron: '30 17 * * 1-5'
   workflow_dispatch: {}
 
 jobs:
@@ -27,7 +31,30 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 5
 
+      - name: Guard -- skip if already ran today
+        id: guard
+        shell: powershell
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            Write-Host "Manual dispatch -- skipping guard"
+            Add-Content $env:GITHUB_OUTPUT "skip=false"
+            exit 0
+          }
+          $planFile = "pead_live\run_plan.json"
+          if (Test-Path $planFile) {
+            $plan = Get-Content $planFile | ConvertFrom-Json
+            $today = (Get-Date -Format "yyyy-MM-dd")
+            if ($plan.run_date -eq $today) {
+              Write-Host "Analysis already ran today ($today) -- skipping redundant trigger."
+              Add-Content $env:GITHUB_OUTPUT "skip=true"
+              exit 0
+            }
+          }
+          Write-Host "No completed run today yet -- proceeding."
+          Add-Content $env:GITHUB_OUTPUT "skip=false"
+
       - name: Locate Python
+        if: steps.guard.outputs.skip != 'true'
         shell: powershell
         run: |
           # Try PATH first (works if runner runs as user or system PATH includes Python)
@@ -62,10 +89,12 @@ jobs:
           Add-Content $env:GITHUB_ENV "PYTHON_EXE=$pyExe"
 
       - name: Install dependencies
+        if: steps.guard.outputs.skip != 'true'
         shell: powershell
         run: '& "$env:PYTHON_EXE" -m pip install -r pead_live/requirements.txt -q'
 
       - name: Run analysis
+        if: steps.guard.outputs.skip != 'true'
         shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
