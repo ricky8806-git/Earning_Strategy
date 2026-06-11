@@ -1,20 +1,3 @@
 {
-  "open_trades": [
-    {
-      "symbol": "ZBRA",
-      "entry_date": "2026-05-13",
-      "entry_price": 247.83999633789062,
-      "stop_price": 223.05599670410157,
-      "eps_beat_pct": 11.76470588235294,
-      "earnings_date": "2026-05-12"
-    },
-    {
-      "symbol": "DELL",
-      "entry_date": "2026-05-29",
-      "entry_price": 418.0,
-      "stop_price": 376.2,
-      "eps_beat_pct": 64.1891891891892,
-      "earnings_date": "2026-05-28"
-    }
-  ]
+  "open_trades": []
 }
