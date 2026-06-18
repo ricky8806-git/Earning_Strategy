@@ -854,3 +854,4 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-06-12,INTU,SKIP_NO_DATA,,,,,no_earnings_data,,
 2026-06-12,ORCL,SCAN_MISS,,2.11,,,eps_low:7.7%,,
 2026-06-15,ADBE,SCAN_MISS,,5.96,,,eps_low:2.6%,,
+2026-06-18,JBL,SCAN_MISS,,3.16,,,eps_low:1.3%,,
