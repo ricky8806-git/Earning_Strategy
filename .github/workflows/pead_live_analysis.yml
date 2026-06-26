@@ -8,13 +8,10 @@ on:
   schedule:
     # Primary: 6:30 AM PDT = 13:30 UTC (daylight time Mar–Nov)
     - cron: '30 13 * * 1-5'
-    # Primary: 6:30 AM PST = 14:30 UTC (standard time Nov–Mar)
+    # Fallback 1: 7:30 AM PDT = 14:30 UTC
     - cron: '30 14 * * 1-5'
-    # Hourly fallbacks through 10 AM PT -- fire if GitHub drops the earlier entries.
-    # The guard step below exits early once today's run is confirmed done.
+    # Fallback 2: 8:30 AM PDT = 15:30 UTC
     - cron: '30 15 * * 1-5'
-    - cron: '30 16 * * 1-5'
-    - cron: '30 17 * * 1-5'
   workflow_dispatch: {}
 
 jobs:
