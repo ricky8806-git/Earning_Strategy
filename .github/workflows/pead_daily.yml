@@ -2,15 +2,10 @@ name: PEAD Daily Run
 
 on:
   schedule:
-    # Primary pair: 14:00 UTC = 10:00 AM EDT (summer) / 15:00 UTC = 10:00 AM EST (winter)
+    # 14:00 UTC = 10:00 AM EDT (summer, Mar–Nov)
     - cron: '0 14 * * 1-5'
+    # 15:00 UTC = 10:00 AM EST (winter, Nov–Mar)
     - cron: '0 15 * * 1-5'
-    # Hourly fallbacks — fire if GitHub drops the earlier entries.
-    # The guard step below exits early once today's run is confirmed done,
-    # so only the first cron that actually fires will execute the strategy.
-    - cron: '0 16 * * 1-5'
-    - cron: '0 17 * * 1-5'
-    - cron: '0 18 * * 1-5'
   workflow_dispatch: {}   # allow manual trigger from the Actions tab
 
 jobs:
