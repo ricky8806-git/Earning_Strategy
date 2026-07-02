@@ -865,3 +865,4 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-06-26,MU,SCAN_MISS,,25.11,,,vol_low:1.5x,,
 2026-07-01,BRO,SKIP_NO_DATA,,,,,no_earnings_data,,
 2026-07-01,FFIV,SKIP_NO_DATA,,,,,no_earnings_data,,
+2026-07-02,FDS,SCAN_MISS,,4.53,,,eps_low:1.8%,,
