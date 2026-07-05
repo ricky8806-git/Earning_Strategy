@@ -263,11 +263,19 @@ def _push_plan(today):
 
     repo_root = Path(__file__).resolve().parent.parent
 
-    def _git(*args):
-        return subprocess.run(
-            ['git', *args], cwd=repo_root,
-            capture_output=True, text=True, timeout=60,
-        )
+    def _git(*args, timeout=120):
+        try:
+            return subprocess.run(
+                ['git', *args], cwd=repo_root,
+                capture_output=True, text=True, timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+            log.warning(f"git {args[0]} timed out after {timeout}s")
+            # Return a fake failed result so callers can handle it uniformly
+            result = subprocess.CompletedProcess(args, returncode=1)
+            result.stdout = ''
+            result.stderr = f'timed out after {timeout}s'
+            return result
 
     # Fix "dubious ownership" when runner service account differs from repo owner
     _git('config', '--global', '--add', 'safe.directory', str(repo_root).replace('\\', '/'))
@@ -286,12 +294,12 @@ def _push_plan(today):
         return
 
     push_url = f"https://x-access-token:{github_token}@github.com/ricky8806-git/Earning_Strategy.git"
-    push = _git('push', push_url, 'HEAD:main')
+    push = _git('push', push_url, 'HEAD:main', timeout=180)
     if push.returncode != 0:
         log.warning(f"git push failed, trying rebase: {push.stderr.strip()[:120]}")
-        _git('fetch', push_url, 'main:refs/remotes/origin/main')
+        _git('fetch', push_url, 'main:refs/remotes/origin/main', timeout=180)
         _git('rebase', 'refs/remotes/origin/main')
-        push2 = _git('push', push_url, 'HEAD:main')
+        push2 = _git('push', push_url, 'HEAD:main', timeout=180)
         if push2.returncode != 0:
             log.warning(f"git push retry failed: {push2.stderr.strip()[:120]}")
         else:
