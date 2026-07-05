@@ -35,7 +35,8 @@ if (-not (Test-Path $envFile)) {
     exit 1
 }
 
-$python = (Get-Command python -ErrorAction SilentlyContinue)?.Source
+$pythonCmd = Get-Command python -ErrorAction SilentlyContinue
+$python = if ($pythonCmd) { $pythonCmd.Source } else { $null }
 if (-not $python) {
     Write-Error "'python' not found in PATH. Install Python and ensure it is in your PATH."
     exit 1
