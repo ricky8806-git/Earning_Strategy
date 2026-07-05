@@ -19,6 +19,19 @@ if (Test-Path $envFile) {
     Write-Error "Missing $envFile -- copy pead_live\.env.example to pead_live\.env and fill in GITHUB_TOKEN"
 }
 
+# NYSE trading-day guard — skip weekends and holidays early
+$tradingDay = python -c @"
+import pandas_market_calendars as mcal
+from datetime import date
+nyse = mcal.get_calendar('NYSE')
+sched = nyse.schedule(start_date=str(date.today()), end_date=str(date.today()))
+print('YES' if not sched.empty else 'NO')
+"@
+if ($tradingDay -ne 'YES') {
+    Add-Content $logFile "$(Get-Date): Not a trading day — skipping"
+    exit 0
+}
+
 Add-Content $logFile "$(Get-Date): Starting PEAD live analysis"
 Set-Location $repoDir
 python pead_live\analysis.py 2>&1 | Tee-Object -FilePath $logFile -Append
