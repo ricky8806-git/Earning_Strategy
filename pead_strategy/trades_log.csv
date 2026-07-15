@@ -868,3 +868,8 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-07-02,FDS,SCAN_MISS,,4.53,,,eps_low:1.8%,,
 2026-07-03,FDS,SCAN_MISS,,4.53,,,eps_low:1.8%,,
 2026-07-06,FDS,SCAN_MISS,,4.53,,,eps_low:1.8%,,
+2026-07-15,BAC,SCAN_MISS,,1.21,,,eps_low:8.0%,,
+2026-07-15,C,SCAN_MISS,,3.14,,,price_low:-5.3%,,
+2026-07-15,GS,SCAN_MISS,,20.98,,,vol_low:1.8x,,
+2026-07-15,JPM,SCAN_MISS,,6.14,,,eps_low:5.9%,,
+2026-07-15,WFC,SCAN_MISS,,2.0,,,price_low:-2.7%,,
