@@ -1,12 +1,12 @@
-2026-07-15 15:26:12,759 INFO === PEAD daily run: 2026-07-15 ===
-2026-07-15 15:26:12,760 INFO Pre-flight connectivity check:
-2026-07-15 15:26:12,822 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-07-15 15:26:13,138 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-07-15 15:26:13,139 INFO Loaded 0 open trades
-2026-07-15 15:26:13,272 INFO Prefetching earnings data for 207 symbols...
-2026-07-15 15:28:27,784 INFO Earnings prefetch: 207/207 symbols returned data (100% success rate)
-2026-07-15 15:28:29,816 INFO Active positions: []
-2026-07-15 15:28:29,816 INFO Target weights:   {'SPY': 1.0}
-2026-07-15 15:28:30,159 INFO Rebalance complete (portfolio_value=229078.93)
-2026-07-15 15:28:30,160 INFO State saved
-2026-07-15 15:28:30,160 INFO Run report written to run_report.md
+2026-07-16 15:38:34,180 INFO === PEAD daily run: 2026-07-16 ===
+2026-07-16 15:38:34,181 INFO Pre-flight connectivity check:
+2026-07-16 15:38:34,219 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-07-16 15:38:34,461 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-07-16 15:38:34,462 INFO Loaded 0 open trades
+2026-07-16 15:38:34,499 INFO Prefetching earnings data for 207 symbols...
+2026-07-16 15:42:10,845 INFO Earnings prefetch: 207/207 symbols returned data (100% success rate)
+2026-07-16 15:42:15,976 INFO Active positions: []
+2026-07-16 15:42:15,976 INFO Target weights:   {'SPY': 1.0}
+2026-07-16 15:42:16,715 INFO Rebalance complete (portfolio_value=229174.70)
+2026-07-16 15:42:16,716 INFO State saved
+2026-07-16 15:42:16,716 INFO Run report written to run_report.md
