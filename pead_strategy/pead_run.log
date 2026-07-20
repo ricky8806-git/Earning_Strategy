@@ -1,14 +1,14 @@
-2026-07-17 15:12:52,593 INFO === PEAD daily run: 2026-07-17 ===
-2026-07-17 15:12:52,594 INFO Pre-flight connectivity check:
-2026-07-17 15:12:52,647 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-07-17 15:12:52,777 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-07-17 15:12:52,778 INFO Loaded 0 open trades
-2026-07-17 15:12:52,861 INFO Prefetching earnings data for 207 symbols...
-2026-07-17 15:14:50,878 INFO Earnings prefetch: 207/207 symbols returned data (100% success rate)
-2026-07-17 15:14:52,371 INFO SIGNAL ISRG  eps_beat=12.0%  price_ret=3.4%  vol=2.0x  trigger=d0  stop=328.52
-2026-07-17 15:14:55,315 INFO Active positions: ['ISRG']
-2026-07-17 15:14:55,316 INFO Target weights:   {'ISRG': 0.07, 'SPY': 0.9299999999999999}
-2026-07-17 15:14:55,726 INFO Rebalance complete (portfolio_value=226299.98)
-2026-07-17 15:15:00,882 INFO Entry price ISRG: yfinance=365.02 → actual fill=353.62
-2026-07-17 15:15:00,884 INFO State saved
-2026-07-17 15:15:00,907 INFO Run report written to run_report.md
+2026-07-20 15:49:52,957 INFO === PEAD daily run: 2026-07-20 ===
+2026-07-20 15:49:52,958 INFO Pre-flight connectivity check:
+2026-07-20 15:49:52,992 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-07-20 15:49:53,029 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-07-20 15:49:53,031 INFO Loaded 1 open trades
+2026-07-20 15:49:53,405 INFO Prefetching earnings data for 206 symbols...
+2026-07-20 15:51:42,587 INFO Earnings prefetch: 206/206 symbols returned data (100% success rate)
+2026-07-20 15:51:44,252 INFO SIGNAL TRV  eps_beat=86.3%  price_ret=9.2%  vol=2.0x  trigger=d0  stop=330.84
+2026-07-20 15:51:45,881 INFO Active positions: ['ISRG', 'TRV']
+2026-07-20 15:51:45,881 INFO Target weights:   {'ISRG': 0.07, 'TRV': 0.07, 'SPY': 0.86}
+2026-07-20 15:51:46,042 INFO Rebalance complete (portfolio_value=226569.50)
+2026-07-20 15:51:51,083 INFO Entry price TRV: yfinance=367.60 → actual fill=369.28
+2026-07-20 15:51:51,084 INFO State saved
+2026-07-20 15:51:51,111 INFO Run report written to run_report.md
