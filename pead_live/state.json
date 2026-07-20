@@ -1,3 +1,14 @@
 {
-  "open_trades": []
+  "open_trades": [
+    {
+      "symbol": "TRV",
+      "entry_date": "2026-07-20",
+      "entry_price": 367.6000061035156,
+      "stop_price": 330.8400054931641,
+      "eps_beat_pct": 86.2708719851577,
+      "earnings_date": "2026-07-17",
+      "price_ret_pct": 9.2,
+      "vol_mult": 2.0
+    }
+  ]
 }

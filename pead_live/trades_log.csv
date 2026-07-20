@@ -1,0 +1,3 @@
+date,symbol,side,type,dollar_amount,status,order_id,note
+2026-07-20,SPY,sell,rebalance,35.13,placed,6a5e2afa-6acb-4670-b202-f5dea4cbe99a,rebalance: reduce SPY from ~100% to 93%
+2026-07-20,TRV,buy,new_entry,35.13,skipped,,skipped: buying_power=$0 < $10 at time of order; cash=$35.13 pending
