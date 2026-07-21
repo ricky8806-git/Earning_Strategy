@@ -6,9 +6,7 @@
       "entry_price": 353.619153,
       "stop_price": 318.2572,
       "eps_beat_pct": 11.999999999999993,
-      "earnings_date": "2026-07-16",
-      "price_ret_pct": NaN,
-      "vol_mult": NaN
+      "earnings_date": "2026-07-16"
     },
     {
       "symbol": "TRV",
@@ -16,9 +14,7 @@
       "entry_price": 369.28,
       "stop_price": 332.352,
       "eps_beat_pct": 86.2708719851577,
-      "earnings_date": "2026-07-17",
-      "price_ret_pct": 9.2,
-      "vol_mult": 2.0
+      "earnings_date": "2026-07-17"
     }
   ]
 }

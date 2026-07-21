@@ -911,3 +911,7 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-07-20,TRV,REBALANCE_BUY,15859.865000000002,,,,,,
 2026-07-20,SPY,REBALANCE_SELL,16007.734202000021,,,,,,
 2026-07-20,TRV,ENTRY,369.28,86.2708719851577,9.2,2.0,,0,0.00%
+2026-07-21,FITB,SCAN_MISS,,0.83,,,eps_low:-1.2%,,
+2026-07-21,RF,SCAN_MISS,,0.68,,,eps_low:7.9%,,
+2026-07-21,TFC,SCAN_MISS,,1.23,,,price_low:-4.2%+vol_low:1.2x,,
+2026-07-21,WRB,SCAN_MISS,,1.27,,,price_low:1.6%+vol_low:1.1x,,
