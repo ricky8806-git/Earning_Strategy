@@ -127,11 +127,11 @@ git add pead_live/state.json pead_live/trades_log.csv pead_live/run_plan.json
 git diff --cached --quiet && echo "Nothing to commit" || \
   git commit -m "chore: pead-live state $(date +%Y-%m-%d) [skip ci]"
 
-git push "$PUSH_URL" "HEAD:$CURRENT_BRANCH" || (
+git push "$PUSH_URL" "HEAD:main" || (
   echo "Push rejected — rebasing and retrying..."
-  git fetch "$PUSH_URL" "$CURRENT_BRANCH:refs/remotes/origin/$CURRENT_BRANCH"
-  git rebase "refs/remotes/origin/$CURRENT_BRANCH"
-  git push "$PUSH_URL" "HEAD:$CURRENT_BRANCH"
+  git fetch "$PUSH_URL" "main:refs/remotes/origin/main"
+  git rebase "refs/remotes/origin/main"
+  git push "$PUSH_URL" "HEAD:main"
 )
 ```
 
