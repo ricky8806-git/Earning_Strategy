@@ -1,7 +1,7 @@
 # PEAD Strategy Run Report
-**Date:** 2026-07-21  
+**Date:** 2026-07-22  
 **Status:** LIVE  
-**Portfolio value:** $227,172.62  
+**Portfolio value:** $227,205.48  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
@@ -19,8 +19,8 @@ _No orders placed (all positions within tolerance band)._
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
 |--------|------------|-------------|------------|-----------|-----------|
-| ISRG | 2026-07-17 | $353.62 | $318.26 | 12.0% | 2 |
-| TRV | 2026-07-20 | $369.28 | $332.35 | 86.3% | 1 |
+| ISRG | 2026-07-17 | $353.62 | $318.26 | 12.0% | 3 |
+| TRV | 2026-07-20 | $369.28 | $332.35 | 86.3% | 2 |
 
 ## Target Weights
 | Symbol | Weight |
