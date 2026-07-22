@@ -1,12 +1,12 @@
-2026-07-21 15:43:22,738 INFO === PEAD daily run: 2026-07-21 ===
-2026-07-21 15:43:22,739 INFO Pre-flight connectivity check:
-2026-07-21 15:43:22,773 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-07-21 15:43:22,807 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
-2026-07-21 15:43:22,809 INFO Loaded 2 open trades
-2026-07-21 15:43:23,358 INFO Prefetching earnings data for 205 symbols...
-2026-07-21 15:45:18,942 INFO Earnings prefetch: 205/205 symbols returned data (100% success rate)
-2026-07-21 15:45:20,259 INFO Active positions: ['ISRG', 'TRV']
-2026-07-21 15:45:20,259 INFO Target weights:   {'ISRG': 0.07, 'TRV': 0.07, 'SPY': 0.86}
-2026-07-21 15:45:20,374 INFO Rebalance complete (portfolio_value=227172.62)
-2026-07-21 15:45:20,376 INFO State saved
-2026-07-21 15:45:20,384 INFO Run report written to run_report.md
+2026-07-22 15:42:05,771 INFO === PEAD daily run: 2026-07-22 ===
+2026-07-22 15:42:05,772 INFO Pre-flight connectivity check:
+2026-07-22 15:42:05,905 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-07-22 15:42:06,020 WARNING   connectivity degraded: Alpaca paper API — HTTP 404
+2026-07-22 15:42:06,022 INFO Loaded 2 open trades
+2026-07-22 15:42:06,979 INFO Prefetching earnings data for 205 symbols...
+2026-07-22 15:44:24,492 INFO Earnings prefetch: 205/205 symbols returned data (100% success rate)
+2026-07-22 15:44:27,707 INFO Active positions: ['ISRG', 'TRV']
+2026-07-22 15:44:27,707 INFO Target weights:   {'ISRG': 0.07, 'TRV': 0.07, 'SPY': 0.86}
+2026-07-22 15:44:28,615 INFO Rebalance complete (portfolio_value=227205.48)
+2026-07-22 15:44:28,616 INFO State saved
+2026-07-22 15:44:28,628 INFO Run report written to run_report.md
