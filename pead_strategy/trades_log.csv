@@ -944,3 +944,10 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-07-23,TEL,SCAN_MISS,,2.94,,,eps_low:3.5%,,
 2026-07-23,TDY,SCAN_MISS,,6.28,,,eps_low:8.5%,,
 2026-07-23,TXN,SCAN_MISS,,2.14,,,price_low:1.0%+vol_low:1.2x,,
+2026-08-14,ISRG,EXIT_TIME,,,,,time,1975.13,12.47%
+2026-08-14,AMAT,SCAN_MISS,,3.5,,,eps_low:3.2%,,
+2026-08-14,TECH,SCAN_MISS,,0.52,,,eps_low:0.0%,,
+2026-08-14,CSCO,SCAN_MISS,,1.22,,,eps_low:4.3%,,
+2026-08-14,COHR,SCAN_MISS,,1.74,,,eps_low:7.4%,,
+2026-08-14,TRMB,SCAN_MISS,,0.86,,,eps_low:7.5%,,
+2026-08-14,SPY,REBALANCE_BUY,17323.26838599998,,,,,,
