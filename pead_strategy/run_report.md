@@ -1,24 +1,20 @@
 # PEAD Strategy Run Report
-**Date:** 2026-08-17  
+**Date:** 2026-08-18  
 **Status:** LIVE  
-**Portfolio value:** $236,394.25  
+**Portfolio value:** $234,469.58  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
 - Alpaca paper API: BLOCKED (HTTP 403 — IP not allowlisted)  
 
 ## Exits This Run
-| Symbol | Reason | Entry Date | Entry Price | Stop Price |
-|--------|--------|------------|-------------|------------|
-| TRV | time | n/a | n/a | n/a |
+_No exits this run._
 
 ## New Entries This Run
 _No new entries this run._
 
 ## Rebalance Orders
-| Symbol | Action | Notional |
-|--------|--------|----------|
-| SPY | REBALANCE_BUY | $16,571.87 |
+_No orders placed (all positions within tolerance band)._
 
 ## Open Positions After Run
 _No open positions._
