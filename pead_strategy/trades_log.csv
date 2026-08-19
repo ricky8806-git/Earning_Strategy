@@ -956,3 +956,5 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-08-17,AIZ,SKIP_NO_DATA,,,,,no_earnings_data,,
 2026-08-17,IQV,SKIP_NO_DATA,,,,,no_earnings_data,,
 2026-08-17,SPY,REBALANCE_BUY,16571.873485999997,,,,,,
+2026-08-19,JKHY,SCAN_MISS,,1.53,,,eps_low:6.3%,,
+2026-08-19,KEYS,SCAN_MISS,,3.07,,,price_low:-5.6%,,
