@@ -1,11 +1,6 @@
 {
-  "run_date": "2026-08-24",
-  "exits": [
-    {
-      "symbol": "TRV",
-      "reason": "time"
-    }
-  ],
+  "run_date": "2026-08-25",
+  "exits": [],
   "new_entries": [],
   "target_weights": {
     "SPY": 1.0
