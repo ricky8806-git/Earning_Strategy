@@ -1,7 +1,7 @@
 # PEAD Strategy Run Report
-**Date:** 2026-08-25  
+**Date:** 2026-08-26  
 **Status:** LIVE  
-**Portfolio value:** $233,081.82  
+**Portfolio value:** $233,371.57  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  

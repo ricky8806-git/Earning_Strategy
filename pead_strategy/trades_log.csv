@@ -962,3 +962,4 @@ date,symbol,action,price,eps_beat_pct,reason,pnl,pct_return
 2026-08-20,JKHY,SCAN_MISS,,1.53,,,eps_low:6.3%,,
 2026-08-20,KEYS,SCAN_MISS,,3.07,,,price_low:-11.5%,,
 2026-08-21,ADI,SCAN_MISS,,3.45,,,eps_low:3.3%,,
+2026-08-26,INTU,SCAN_MISS,,4.03,,,price_low:-3.4%+vol_low:1.9x,,
