@@ -1,16 +1,15 @@
-2026-08-28 00:46:46,315 INFO === PEAD daily run: 2026-08-28 ===
-2026-08-28 00:46:46,316 INFO Pre-flight connectivity check:
-2026-08-28 00:46:46,399 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-08-28 00:46:46,950 WARNING   connectivity degraded: Alpaca paper API — HTTP 401
-2026-08-28 00:46:46,951 INFO Loaded 0 open trades
-2026-08-28 00:46:46,993 INFO Prefetching earnings data for 206 symbols...
-2026-08-28 00:49:36,611 WARNING get_earnings(ZBH) failed: ['Earnings Date']
-2026-08-28 00:49:37,629 INFO Earnings prefetch: 205/206 symbols returned data (100% success rate)
-2026-08-28 00:49:39,005 INFO SIGNAL CRM  eps_beat=80.4%  price_ret=22.5%  vol=4.6x  trigger=d1  stop=nan
-2026-08-28 00:49:39,525 INFO Active positions: []
-2026-08-28 00:49:39,525 INFO Target weights:   {'SPY': 1.0}
-2026-08-28 00:49:40,129 INFO Rebalance complete (portfolio_value=235082.63)
-2026-08-28 00:49:45,352 INFO State saved
+2026-08-28 01:20:26,658 INFO === PEAD daily run: 2026-08-28 ===
+2026-08-28 01:20:26,660 INFO Pre-flight connectivity check:
+2026-08-28 01:20:26,713 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-08-28 01:20:26,953 WARNING   connectivity degraded: Alpaca paper API — HTTP 401
+2026-08-28 01:20:26,954 INFO Loaded 0 open trades
+2026-08-28 01:20:27,008 INFO Prefetching earnings data for 206 symbols...
+2026-08-28 01:23:13,369 INFO Earnings prefetch: 206/206 symbols returned data (100% success rate)
+2026-08-28 01:23:14,566 INFO SIGNAL CRM  eps_beat=80.4%  price_ret=22.5%  vol=4.6x  trigger=d1  stop=nan
+2026-08-28 01:23:14,922 INFO Active positions: []
+2026-08-28 01:23:14,923 INFO Target weights:   {'SPY': 1.0}
+2026-08-28 01:23:15,479 INFO Rebalance complete (portfolio_value=235189.38)
+2026-08-28 01:23:20,722 INFO State saved
 Traceback (most recent call last):
   File "/home/runner/work/Earning_Strategy/Earning_Strategy/pead_strategy/main.py", line 520, in <module>
     run()
