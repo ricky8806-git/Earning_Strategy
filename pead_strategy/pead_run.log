@@ -1,13 +1,12 @@
-2026-08-28 23:24:28,370 INFO === PEAD daily run: 2026-08-28 ===
-2026-08-28 23:24:28,371 INFO Pre-flight connectivity check:
-2026-08-28 23:24:28,462 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
-2026-08-28 23:24:28,659 WARNING   connectivity degraded: Alpaca paper API — HTTP 401
-2026-08-28 23:24:28,660 INFO Loaded 0 open trades
-2026-08-28 23:24:28,963 INFO Prefetching earnings data for 206 symbols...
-2026-08-28 23:27:24,237 INFO Earnings prefetch: 206/206 symbols returned data (100% success rate)
-2026-08-28 23:27:26,243 INFO SIGNAL CRM  eps_beat=80.4%  price_ret=22.5%  vol=4.6x  trigger=d1  stop=225.42
-2026-08-28 23:27:27,024 INFO Active positions: ['CRM']
-2026-08-28 23:27:27,025 INFO Target weights:   {'CRM': 0.07, 'SPY': 0.9299999999999999}
-2026-08-28 23:27:27,626 INFO Rebalance complete (portfolio_value=234628.21)
-2026-08-28 23:27:32,817 INFO State saved
-2026-08-28 23:27:32,837 INFO Run report written to run_report.md
+2026-08-29 00:27:10,852 INFO === PEAD daily run: 2026-08-29 ===
+2026-08-29 00:27:10,853 INFO Pre-flight connectivity check:
+2026-08-29 00:27:10,895 WARNING   connectivity degraded: Yahoo Finance — HTTP 429
+2026-08-29 00:27:10,933 WARNING   connectivity degraded: Alpaca paper API — HTTP 401
+2026-08-29 00:27:10,935 INFO Loaded 1 open trades
+2026-08-29 00:27:11,357 INFO Prefetching earnings data for 205 symbols...
+2026-08-29 00:29:42,513 INFO Earnings prefetch: 205/205 symbols returned data (100% success rate)
+2026-08-29 00:29:43,143 INFO Active positions: ['CRM']
+2026-08-29 00:29:43,143 INFO Target weights:   {'CRM': 0.07, 'SPY': 0.9299999999999999}
+2026-08-29 00:29:43,591 INFO Rebalance complete (portfolio_value=234652.58)
+2026-08-29 00:29:43,592 INFO State saved
+2026-08-29 00:29:43,597 INFO Run report written to run_report.md
