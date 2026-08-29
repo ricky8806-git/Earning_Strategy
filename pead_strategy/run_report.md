@@ -1,7 +1,7 @@
 # PEAD Strategy Run Report
-**Date:** 2026-08-28  
+**Date:** 2026-08-29  
 **Status:** LIVE  
-**Portfolio value:** $234,628.21  
+**Portfolio value:** $234,652.58  
 
 ## Data Quality
 - Yahoo Finance: BLOCKED (HTTP 403 — IP not allowlisted)  
@@ -11,15 +11,13 @@
 _No exits this run._
 
 ## New Entries This Run
-| Symbol | EPS Beat % | Price Ret % | Vol Mult | Entry Price | Stop Price | Earnings Date |
-|--------|-----------|-------------|----------|-------------|------------|---------------|
-| CRM | 80.4% | 22.5% | 4.6x | $250.47 | $225.42 | 2026-08-26 |
+_No new entries this run._
 
 ## Rebalance Orders
 | Symbol | Action | Notional |
 |--------|--------|----------|
-| CRM | REBALANCE_BUY | $16,423.97 |
-| SPY | REBALANCE_SELL | $16,424.32 |
+| CRM | REBALANCE_BUY | $16,425.68 |
+| SPY | REBALANCE_SELL | $16,426.02 |
 
 ## Open Positions After Run
 | Symbol | Entry Date | Entry Price | Stop Price | EPS Beat % | Days Held |
